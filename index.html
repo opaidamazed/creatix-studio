@@ -105,7 +105,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 <footer>Creatix Bot <span>·</span> أدوات عربية لإدارة مجتمع Discord</footer>
 </div>
 
-<div id="dash" class="dash" hidden>
+<div id="dash" class="dash noauth" hidden>
 <aside class="sb">
 <a class="logo" href="./">Creatix <b>Bot</b></a>
 <label for="g">السيرفر</label><select id="g"></select>
@@ -117,7 +117,12 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 <h4>الحساب</h4><button class="nv" id="out">تسجيل الخروج</button>
 </aside>
 <main class="main">
-<div id="gate" class="card" hidden><p id="gt">سجّل دخولك بحساب Discord لإدارة سيرفراتك.</p><br><a class="btn p" id="lg">تسجيل الدخول</a> <a class="btn inv">أضف البوت</a></div>
+<div id="gate" class="gate" hidden><div class="gate-card">
+<div class="gate-mark">C</div><h2 id="gh"></h2><p id="gt"></p>
+<div class="gate-actions"><a class="btn p" id="lg">المتابعة بحساب Discord</a><a class="btn p inv" id="ab">أضف البوت لسيرفرك</a><button class="btn" id="rf">تحديث</button></div>
+<small class="gate-note" id="gn">نطلب معرفة اسمك وسيرفراتك فقط. مش بنقرأ رسائلك.</small>
+<div><a class="gate-back" href="./">العودة للصفحة الرئيسية</a> <button class="gate-back" id="lo">تسجيل الخروج</button></div>
+</div></div>
 <div id="panel" hidden>
 <section data-s="ov"><h2>نظرة عامة</h2><p class="sub">اختار الخاصية اللي تحب تضبطها.</p>
 <div class="cs">
@@ -161,15 +166,21 @@ if(location.hash.startsWith('#sid=')){localStorage.sid=location.hash.slice(5);rs
 else if(location.hash=='#/dashboard')rs('dashboard');
 const api=async(u,o={})=>{const r=await fetch(API+u,{...o,headers:{authorization:'Bearer '+(localStorage.sid||''),'content-type':'application/json'}});
 if(r.status==401){delete localStorage.sid;throw 401}if(!r.ok)throw r.status;return r.json()};
-const gate=(on,t)=>{$('gate').hidden=!on;$('panel').hidden=on;if(t)$('gt').textContent=t};
+const GM={load:['جارٍ التحميل…','لحظات ونجهّز لوحتك.'],login:['سجّل دخولك للمتابعة','استخدم حساب Discord لإدارة السيرفرات اللي البوت موجود فيها.'],none:['البوت مش في سيرفر تديره','أضف البوت لسيرفرك، وبعدها حدّث الصفحة.'],err:['تعذّر تحميل البيانات','حدّث الصفحة بعد لحظات.']};
+function gate(m,t){$('gate').hidden=!m;$('panel').hidden=!!m;$('dash').classList.toggle('noauth',!!m);if(!m)return;
+$('gh').textContent=GM[m][0];$('gt').textContent=t||GM[m][1];$('lg').hidden=$('gn').hidden=m!='login';
+$('ab').hidden=$('rf').hidden=$('lo').hidden=!(m=='none'||m=='err')}
+$('rf').onclick=()=>location.reload();
 let on=0;
 const isDash=()=>fake!==null?fake:location.pathname.replace(/\/$/,'').endsWith('/dashboard');
 function go(u){const d=/dashboard\/?$/.test(u);try{history.pushState(null,'',new URL(u,document.baseURI))}catch(e){fake=d}route();scrollTo(0,0)}
 function route(){const d=isDash();if(!d&&fake===null){try{if(location.pathname!==new URL(document.baseURI).pathname)history.replaceState(null,'',document.baseURI)}catch(e){}}$('land').hidden=d;$('dash').hidden=!d;if(d&&!on){on=1;start()}if(!d)on=0}
-async function start(){if(!localStorage.sid)return gate(1);
+async function start(){if(!localStorage.sid)return gate('login');gate('load');
 try{const gs=await api('/api/guilds');
-if(!gs.length)return gate(1,'مفيش سيرفر تديره والبوت موجود فيه. أضف البوت الأول.');
-gate(0);$('g').innerHTML=gs.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');load()}catch(e){gate(1,e===401?'انتهت الجلسة، سجّل دخولك مرة تانية.':'مشكلة مؤقتة في الاتصال. حدّث الصفحة بعد لحظات.')}}
+if(!gs.length){let t;try{const d=await api('/api/diag');t=d.bot===0?'البوت لسه مش مضاف على أي سيرفر.':d.shared===0?'البوت موجود، بس مش في أي سيرفر إنت فيه.':'البوت موجود في سيرفراتك، بس مفيش عندك صلاحية Manage Server فيها.'}catch(e){}return gate('none',t)}
+gate(0);$('g').innerHTML=gs.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');load()}
+catch(e){gate(e===401?'login':'err',e===401?'انتهت الجلسة، سجّل دخولك مرة تانية.':'')}}
+$('lo').onclick=()=>$('out').click();
 async function load(){const id=$('g').value;$('bar').classList.add('on');$('panel').classList.add('loading');try{
 const [m,c]=await Promise.all([api('/api/guilds/'+id+'/meta'),api('/api/guilds/'+id+'/config')]);
 $('wch').innerHTML=opt(m.channels,x=>'#'+esc(x.name));$('ro').innerHTML=opt(m.roles,x=>esc(x.name));

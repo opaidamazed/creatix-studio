@@ -51,3 +51,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 
 [data-s],.cs .card,.row,.toast{animation:none!important}
 .nv,button.card,.savebar,#panel{transition:none!important}.cx-bar.on{animation:none}
 }
+
+/* login / empty-state screen: focused card, no sidebar */
+.dash.noauth{grid-template-columns:1fr}
+.dash.noauth .sb{display:none}
+.dash.noauth .main{max-width:none;display:grid;place-items:center;min-height:100vh;padding:24px}
+.gate{width:min(440px,100%);animation:cx-up .45s var(--cx-ease) both}
+.gate-card{text-align:center;padding:36px 28px 26px;border:1px solid var(--bd);border-radius:20px;background:linear-gradient(160deg,rgba(36,0,70,.7),rgba(25,0,54,.92));box-shadow:0 30px 80px rgba(91,35,132,.28)}
+.gate-mark{width:56px;height:56px;margin:0 auto 18px;display:grid;place-items:center;border-radius:16px;font-weight:700;font-size:26px;background:linear-gradient(135deg,#a45be0,#6c2ca8);box-shadow:0 10px 28px rgba(129,58,184,.4)}
+.gate h2{margin:0 0 6px;font-size:22px}.gate p{margin:0 0 22px;color:var(--mu)}
+.gate-actions{display:grid;gap:10px}.gate-actions .btn{text-align:center}
+.gate-note{display:block;margin-top:14px;color:var(--mu);font-size:12.5px}
+.gate-back{display:inline-block;margin:16px 6px 0;background:none;border:0;color:var(--mu);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.gate-back:hover{color:var(--tx)}

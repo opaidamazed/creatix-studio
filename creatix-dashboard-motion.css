@@ -1,0 +1,53 @@
+/* Dashboard motion + interaction layer. Load after creatix-enhancements.css */
+:root{--cx-ease:cubic-bezier(.2,.75,.25,1)}
+@keyframes cx-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes cx-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes cx-row{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes cx-out{to{opacity:0;transform:scale(.96)}}
+@keyframes cx-spin{to{transform:rotate(360deg)}}
+@keyframes cx-slide{from{background-position:-40% 0}to{background-position:140% 0}}
+@keyframes cx-toast{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes cx-toast-out{to{opacity:0;transform:translateY(8px)}}
+
+/* section switch: content slides in from the sidebar side */
+[data-s]:not([hidden]){animation:cx-in .38s var(--cx-ease) both}
+.cs .card{animation:cx-up .42s var(--cx-ease) both}
+.cs .card:nth-child(2){animation-delay:.06s}.cs .card:nth-child(3){animation-delay:.12s}
+.row{animation:cx-row .28s var(--cx-ease) both}.row.out{animation:cx-out .18s ease forwards}
+
+/* nav + cards */
+.nv{transition:background .2s,color .2s,box-shadow .25s,transform .25s var(--cx-ease)}
+.nv:hover{transform:translateX(-3px)}
+button.card{transition:transform .25s var(--cx-ease),border-color .25s,box-shadow .25s}
+button.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(91,35,132,.25)}
+button.card:active{transform:scale(.98)}
+
+/* fields */
+input,select,textarea{transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(157,78,221,.22)}
+.pv{transition:border-color .25s}
+
+/* loading: top progress bar + dimmed panel */
+.cx-bar{position:fixed;top:0;inset-inline:0;height:3px;z-index:60;opacity:0;transition:opacity .2s;background:linear-gradient(90deg,transparent,var(--hi),var(--ac),transparent) no-repeat;background-size:40% 100%}
+.cx-bar.on{opacity:1;animation:cx-slide 1s linear infinite}
+#panel{transition:opacity .2s}#panel.loading{opacity:.5;pointer-events:none}
+
+/* save button busy state */
+.btn.busy{pointer-events:none;opacity:.85}
+.btn.busy::before{content:"";display:inline-block;width:12px;height:12px;margin-inline-end:8px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;vertical-align:-2px;animation:cx-spin .7s linear infinite}
+
+/* unsaved-changes bar */
+.savebar{position:fixed;bottom:20px;left:50%;translate:-50% 150%;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;max-width:calc(100vw - 24px);padding:10px 14px;border:1px solid var(--bd);border-radius:14px;background:rgba(27,18,40,.92);backdrop-filter:blur(14px);box-shadow:0 18px 44px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:translate .35s var(--cx-ease),opacity .25s}
+.savebar.show{translate:-50% 0;opacity:1;pointer-events:auto}
+.savebar span{color:var(--mu);font-size:14px}
+
+/* toasts */
+.toasts{position:fixed;inset-inline-start:20px;bottom:20px;z-index:70;display:grid;gap:8px}
+.toast{padding:11px 16px;border:1px solid var(--bd);border-inline-start:4px solid var(--ac);border-radius:10px;background:var(--pn);box-shadow:0 14px 34px rgba(0,0,0,.35);animation:cx-toast .3s var(--cx-ease) both}
+.toast.ok{border-inline-start-color:#4ade80}.toast.err{border-inline-start-color:#f87171}
+.toast.out{animation:cx-toast-out .25s ease forwards}
+
+@media (prefers-reduced-motion:reduce){
+[data-s],.cs .card,.row,.toast{animation:none!important}
+.nv,button.card,.savebar,#panel{transition:none!important}.cx-bar.on{animation:none}
+}

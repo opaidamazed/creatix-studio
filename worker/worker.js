@@ -3,6 +3,7 @@
 // Secrets: CLIENT_ID, CLIENT_SECRET, BOT_TOKEN, BOT_API_SECRET
 // Variable: FRONT = رابط موقع GitHub Pages (مثال: https://name.github.io/repo/)
 const D = "https://discord.com/api/v10";
+const UA = "DiscordBot (https://opaidamazed.github.io/creatix-studio, 1.0)";
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json" } });
 const rid = () => crypto.randomUUID().replace(/-/g, "");
 const cookie = (req, n) => (req.headers.get("cookie") || "").split("; ").find(c => c.startsWith(n + "="))?.split("=")[1];
@@ -26,7 +27,7 @@ const getCfg = async (env, id) => (await env.CFG.get("cfg:" + id, "json")) || DE
 async function userGuilds(env, sid, at) {
   const key = "ug:" + sid, c = await env.CFG.get(key, "json");
   if (c && Date.now() - c.t < 300000) return c.d;
-  const r = await fetch(D + "/users/@me/guilds", { headers: { authorization: "Bearer " + at } });
+  const r = await fetch(D + "/users/@me/guilds", { headers: { authorization: "Bearer " + at, "user-agent": UA } });
   if (r.status === 401) return 401;
   const d = await r.json().catch(() => null);
   if (!Array.isArray(d)) return c ? c.d : 503;
@@ -37,13 +38,15 @@ async function userGuilds(env, sid, at) {
 async function botGuildIds(env) {
   const c = await env.CFG.get("bg", "json");
   if (c && Date.now() - c.t < 60000) return c.d;
-  const d = await bot(env, "/users/@me/guilds");
-  if (!Array.isArray(d)) return c ? c.d : null;
+  if (!env.BOT_TOKEN) return { err: "BOT_TOKEN غير مضبوط في الـ Worker" };
+  const r = await fetch(D + "/users/@me/guilds", { headers: { authorization: "Bot " + env.BOT_TOKEN, "user-agent": UA } });
+  const d = await r.json().catch(() => null);
+  if (!Array.isArray(d)) return c ? c.d : { err: "Discord " + r.status + " " + S((d && d.message) || "", 80) };
   const ids = d.map(g => g.id);
   await env.CFG.put("bg", JSON.stringify({ t: Date.now(), d: ids }), { expirationTtl: 3600 });
   return ids;
 }
-const bot = (env, path) => fetch(D + path, { headers: { authorization: "Bot " + env.BOT_TOKEN } }).then(r => r.json());
+const bot = (env, path) => fetch(D + path, { headers: { authorization: "Bot " + env.BOT_TOKEN, "user-agent": UA } }).then(r => r.json());
 
 const H = {
   async fetch(req, env) {
@@ -60,7 +63,7 @@ const H = {
       if (p === "/callback") {
         const st = cookie(req, "st");
         if (!st || st !== u.searchParams.get("state")) return new Response("bad state", { status: 400 });
-        const t = await (await fetch(D + "/oauth2/token", { method: "POST", body: new URLSearchParams({ client_id: env.CLIENT_ID, client_secret: env.CLIENT_SECRET, grant_type: "authorization_code", code: u.searchParams.get("code") || "", redirect_uri: u.origin + "/callback" }) })).json();
+        const t = await (await fetch(D + "/oauth2/token", { method: "POST", headers: { "user-agent": UA }, body: new URLSearchParams({ client_id: env.CLIENT_ID, client_secret: env.CLIENT_SECRET, grant_type: "authorization_code", code: u.searchParams.get("code") || "", redirect_uri: u.origin + "/callback" }) })).json();
         if (!t.access_token) return new Response("login failed", { status: 400 });
         const sid = rid();
         await env.CFG.put("sess:" + sid, JSON.stringify({ at: t.access_token }), { expirationTtl: 518400 });
@@ -81,7 +84,7 @@ const H = {
         if (ug === 401) return json({ error: "auth" }, 401);
         if (ug === 503) return json({ error: "busy" }, 503);
         const bids = await botGuildIds(env);
-        if (!bids) return json({ error: "bot" }, 503);
+        if (!Array.isArray(bids)) return json({ error: "bot", detail: bids.err }, 503);
         const botIds = new Set(bids);
         if (p === "/api/diag") return json({ user: ug.length, bot: bids.length, shared: ug.filter(g => botIds.has(g.id)).length });
         const ok = ug.filter(g => (g.owner || (BigInt(g.permissions) & 0x28n)) && botIds.has(g.id));
@@ -107,7 +110,7 @@ const H = {
       }
       return new Response("not found", { status: 404 });
     } catch (e) {
-      return json({ error: "server" }, 500);
+      return json({ error: "server", detail: String((e && e.message) || e).slice(0, 120) }, 500);
     }
   },
 };
@@ -115,9 +118,10 @@ const H = {
 
 export default {
   async fetch(req, env) {
-    const h = { "access-control-allow-origin": new URL(env.FRONT).origin, "access-control-allow-headers": "authorization,content-type", "access-control-allow-methods": "GET,PUT,OPTIONS" };
+    let origin = "*"; try { origin = new URL(env.FRONT).origin; } catch (e) {}
+    const h = { "access-control-allow-origin": origin, "access-control-allow-headers": "authorization,content-type", "access-control-allow-methods": "GET,PUT,OPTIONS" };
     if (req.method === "OPTIONS") return new Response(null, { headers: h });
-    const r = await H.fetch(req, env);
+    let r; try { r = await H.fetch(req, env); } catch (e) { r = json({ error: "server", detail: String((e && e.message) || e).slice(0, 120) }, 500); }
     const n = new Response(r.body, r);
     for (const k in h) n.headers.set(k, h[k]);
     return n;

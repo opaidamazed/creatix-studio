@@ -23,6 +23,26 @@ function clean(b) {
 }
 const DEF = clean({ welcome: { on: true, title: "أهلاً بيك!", text: "أهلاً {member} في {server} 🎉\nأنت العضو رقم {count}" } });
 const getCfg = async (env, id) => (await env.CFG.get("cfg:" + id, "json")) || DEF;
+async function userGuilds(env, sid, at) {
+  const key = "ug:" + sid, c = await env.CFG.get(key, "json");
+  if (c && Date.now() - c.t < 300000) return c.d;
+  const r = await fetch(D + "/users/@me/guilds", { headers: { authorization: "Bearer " + at } });
+  if (r.status === 401) return 401;
+  const d = await r.json().catch(() => null);
+  if (!Array.isArray(d)) return c ? c.d : 503;
+  const slim = d.map(g => ({ id: g.id, name: g.name, owner: g.owner, permissions: g.permissions }));
+  await env.CFG.put(key, JSON.stringify({ t: Date.now(), d: slim }), { expirationTtl: 86400 });
+  return slim;
+}
+async function botGuildIds(env) {
+  const c = await env.CFG.get("bg", "json");
+  if (c && Date.now() - c.t < 60000) return c.d;
+  const d = await bot(env, "/users/@me/guilds");
+  if (!Array.isArray(d)) return c ? c.d : null;
+  const ids = d.map(g => g.id);
+  await env.CFG.put("bg", JSON.stringify({ t: Date.now(), d: ids }), { expirationTtl: 3600 });
+  return ids;
+}
 const bot = (env, path) => fetch(D + path, { headers: { authorization: "Bot " + env.BOT_TOKEN } }).then(r => r.json());
 
 const H = {
@@ -57,9 +77,13 @@ const H = {
         const sid = (req.headers.get("authorization") || "").slice(7);
         const s = sid && await env.CFG.get("sess:" + sid, "json");
         if (!s) return json({ error: "auth" }, 401);
-        const ug = await (await fetch(D + "/users/@me/guilds", { headers: { authorization: "Bearer " + s.at } })).json();
-        if (!Array.isArray(ug)) return json({ error: "auth" }, 401);
-        const botIds = new Set((await bot(env, "/users/@me/guilds")).map(g => g.id));
+        const ug = await userGuilds(env, sid, s.at);
+        if (ug === 401) return json({ error: "auth" }, 401);
+        if (ug === 503) return json({ error: "busy" }, 503);
+        const bids = await botGuildIds(env);
+        if (!bids) return json({ error: "bot" }, 503);
+        const botIds = new Set(bids);
+        if (p === "/api/diag") return json({ user: ug.length, bot: bids.length, shared: ug.filter(g => botIds.has(g.id)).length });
         const ok = ug.filter(g => (g.owner || (BigInt(g.permissions) & 0x28n)) && botIds.has(g.id));
         if (p === "/api/guilds") return json(ok.map(g => ({ id: g.id, name: g.name })));
 

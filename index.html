@@ -46,6 +46,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 @media(max-width:760px){.dash{grid-template-columns:1fr}.sb{position:static;height:auto}}
 </style>
 <link rel="stylesheet" href="creatix-enhancements.css">
+<link rel="stylesheet" href="creatix-dashboard-motion.css">
 
 <div id="land">
 <div class="top"><a class="logo" href="#/">Creatix <b>Bot</b></a><a class="btn" href="#/dashboard">لوحة التحكم</a></div>
@@ -99,46 +100,24 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 
 <div id="dash" class="dash" hidden>
 <aside class="sb">
-  <div class="sb-brand">
-    <a class="sb-logo" href="#/"><span class="brand-mark">✦</span><span><strong>Creatix <b>Bot</b></strong><small>إدارة مجتمعك بسهولة</small></span></a>
-    <span class="sidebar-status"><i></i> BOT</span>
-  </div>
-  <div class="server-field">
-    <label for="g">السيرفر الحالي</label>
-    <div class="server-select-wrap"><span class="server-dot">◈</span><select id="g" aria-label="اختيار السيرفر"></select></div>
-  </div>
-  <nav class="side-navigation" aria-label="التنقل الرئيسي">
-    <div class="nav-group">
-      <h4>المساحة</h4>
-      <button class="nv" data-v="ov"><span class="nav-icon">⌂</span><span class="nav-copy"><strong>نظرة عامة</strong><small>ملخص إعدادات السيرفر</small></span><span class="nav-arrow">‹</span></button>
-    </div>
-    <div class="nav-group">
-      <h4>إعدادات البوت</h4>
-      <button class="nv" data-v="wl"><span class="nav-icon">✦</span><span class="nav-copy"><strong>الترحيب</strong><small>رسائل الأعضاء الجدد</small></span><span class="nav-arrow">‹</span></button>
-      <button class="nv" data-v="rp"><span class="nav-icon">↗</span><span class="nav-copy"><strong>الرد التلقائي</strong><small>الكلمات والردود</small></span><span class="nav-arrow">‹</span></button>
-      <button class="nv" data-v="ar"><span class="nav-icon">◇</span><span class="nav-copy"><strong>الرتبة التلقائية</strong><small>تنظيم الأعضاء الجدد</small></span><span class="nav-arrow">‹</span></button>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-help"><span>؟</span><div><strong>محتاج مساعدة؟</strong><small>راجع إعدادات البوت خطوة بخطوة.</small></div></div>
-    <button class="logout-btn" id="out"><span>↪</span> تسجيل الخروج</button>
-  </div>
+<a class="logo" href="#/">Creatix <b>Bot</b></a>
+<label for="g">السيرفر</label><select id="g"></select>
+<h4>عام</h4><button class="nv" data-v="ov">نظرة عامة</button>
+<h4>الخصائص</h4>
+<button class="nv" data-v="wl">الترحيب</button>
+<button class="nv" data-v="rp">الرد التلقائي</button>
+<button class="nv" data-v="ar">الرتبة التلقائية</button>
+<h4>الحساب</h4><button class="nv" id="out">تسجيل الخروج</button>
 </aside>
 <main class="main">
 <div id="gate" class="card" hidden><p id="gt">سجّل دخولك بحساب Discord لإدارة سيرفراتك.</p><br><a class="btn p" id="lg">تسجيل الدخول</a> <a class="btn inv">أضف البوت</a></div>
 <div id="panel" hidden>
-<section data-s="ov" class="overview-section">
-  <div class="dashboard-topbar"><div><span class="eyebrow">مساحة الإدارة</span><p>إعدادات السيرفر <span> / </span> نظرة عامة</p></div><span class="dashboard-account"><i></i> لوحة إدارة Creatix</span></div>
-  <div class="overview-heading"><div><span class="eyebrow">أهلاً بعودتك</span><h2>نظرة عامة</h2><p class="sub">كل أدوات إدارة البوت في مكان واحد. اختار الخاصية اللي تحب تضبطها.</p></div><div class="overview-orbit"><span>✦</span><small>CREATIX BOT</small></div></div>
-  <div class="overview-banner"><div><span class="banner-kicker">تحكم أبسط · مجتمع أنظم</span><h3>خلّي إدارة سيرفرك أسهل</h3><p>خصص تجربة الأعضاء الجدد، جهّز ردودك، ونظّم الرتب من لوحة واحدة.</p></div><div class="banner-emblem">✧</div></div>
-  <div class="overview-section-heading"><div><h3>خصائص البوت</h3><p>اختار واحدة من الخصائص للانتقال إلى إعداداتها.</p></div><span class="section-count">03 خصائص</span></div>
-  <div class="overview-cards">
-    <button class="overview-card welcome-overview" data-v="wl"><span class="overview-card-icon">✦</span><span class="overview-card-tag">WELCOME</span><h3>الترحيب</h3><p>رسالة وصورة مخصصة للأعضاء الجدد، مع اختيار الروم والنص واللون ومعاينة قبل الحفظ.</p><span class="overview-card-action">إدارة الترحيب <b>←</b></span></button>
-    <button class="overview-card replies-overview" data-v="rp"><span class="overview-card-icon">↗</span><span class="overview-card-tag">AUTO REPLIES</span><h3>الرد التلقائي</h3><p>أضف الكلمات المفتاحية والردود المناسبة لتسهيل التفاعل والإجابة عن الأسئلة المتكررة.</p><span class="overview-card-action">إدارة الردود <b>←</b></span></button>
-    <button class="overview-card roles-overview" data-v="ar"><span class="overview-card-icon">◇</span><span class="overview-card-tag">AUTO ROLE</span><h3>الرتبة التلقائية</h3><p>حدد الرتبة التي يحصل عليها العضو الجديد تلقائيًا عند دخوله إلى السيرفر.</p><span class="overview-card-action">إدارة الرتب <b>←</b></span></button>
-  </div>
-  <div class="overview-footnote"><span>✧</span> تقدر ترجع لنظرة عامة في أي وقت من القائمة الجانبية.</div>
-</section>
+<section data-s="ov"><h2>نظرة عامة</h2><p class="sub">اختار الخاصية اللي تحب تضبطها.</p>
+<div class="cs">
+<button class="card" data-v="wl"><h3>الترحيب</h3><p>رسالة وصورة للأعضاء الجدد</p></button>
+<button class="card" data-v="rp"><h3>الرد التلقائي</h3><p>كلمات وردود جاهزة</p></button>
+<button class="card" data-v="ar"><h3>الرتبة التلقائية</h3><p>رتبة تتضاف عند الدخول</p></button>
+</div></section>
 <section data-s="wl" hidden><div class="welcome-layout"><div class="welcome-form"><div class="welcome-heading"><div><span class="eyebrow">إعدادات المجتمع</span><h2>إعداد الترحيب</h2><p class="sub">خصص الرسالة التي تظهر تلقائيًا عند انضمام عضو جديد إلى سيرفرك.</p></div><span class="heading-icon">✦</span></div>
 <div class="welcome-toggle"><div><strong>تفعيل الترحيب</strong><small>سيتم عرض رسالة الترحيب عند دخول الأعضاء الجدد.</small></div><label class="switch"><input id="won" type="checkbox"><span></span></label></div>
 <label for="wch">الروم</label><select id="wch"></select>
@@ -150,43 +129,18 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 <div class="welcome-preview-head"><strong>معاينة الرسالة</strong><span>تتحدث تلقائيًا أثناء التعديل</span></div><div class="pv" id="pv"></div>
 <div class="welcome-save"><button class="btn p sv">حفظ التغييرات</button> <span class="st"></span></div></div>
 <aside class="welcome-aside"><div class="aside-art"><span>✦</span><strong>Creatix</strong><small>WELCOME EXPERIENCE</small></div><div class="aside-tip"><span class="tip-icon">✧</span><h3>نصائح لرسالة ترحيب مميزة</h3><p>خلّي أول انطباع عن سيرفرك واضح وودود، وعرّف العضو الجديد بالمكان.</p><ul><li>استخدم اسم السيرفر لتخصيص الرسالة.</li><li>أضف روابط مهمة مثل القوانين.</li><li>اكتب رسالة قصيرة وسهلة القراءة.</li></ul></div><div class="aside-note"><strong>المتغيرات المتاحة</strong><code>{member}</code><code>{server}</code><code>{count}</code><small>استخدمها داخل نص الترحيب لتخصيص الرسالة تلقائيًا.</small></div></aside></div></section>
-<section data-s="rp" class="settings-section replies-section" hidden>
-  <div class="dashboard-topbar"><div><span class="eyebrow">إعدادات البوت</span><p>الخصائص <span> / </span> الرد التلقائي</p></div><span class="dashboard-account"><i></i> إدارة الردود</span></div>
-  <div class="section-page-heading"><div><span class="eyebrow">AUTO REPLIES</span><h2>الرد التلقائي</h2><p class="sub">جهّز ردودًا تلقائية تظهر عندما يكتب أحد الأعضاء كلمة أو عبارة محددة في الشات.</p></div><span class="heading-icon">↗</span></div>
-  <div class="feature-workspace replies-layout">
-    <div class="feature-main-panel">
-      <div class="panel-heading"><div><h3>قائمة الكلمات والردود</h3><p>كل كلمة مفتاحية مرتبطة بالرد الخاص بها.</p></div><span class="panel-pill">إعدادات مخصصة</span></div>
-      <div class="reply-column-head"><span>الكلمة المفتاحية</span><span>الرد الذي سيظهر</span><span></span></div>
-      <div id="rl" class="replies-list"></div>
-      <div class="panel-actions"><button class="btn add-reply-btn" id="ad"><span>＋</span> إضافة رد جديد</button><div class="save-actions"><button class="btn p sv">حفظ التغييرات</button><span class="st"></span></div></div>
-    </div>
-    <aside class="settings-aside">
-      <div class="aside-art replies-art"><span>↗</span><strong>SMART REPLIES</strong><small>ردود أسرع لمجتمعك</small></div>
-      <div class="aside-tip"><span class="tip-icon">✧</span><h3>نظّم ردودك بذكاء</h3><p>استخدم كلمات واضحة وسهلة التذكر عشان يكون الرد مناسبًا للسؤال.</p><ul><li>اختار كلمة مفتاحية مميزة.</li><li>اكتب ردًا مختصرًا ومباشرًا.</li><li>تقدر تضيف أكثر من رد وتعدّلهم لاحقًا.</li></ul></div>
-      <div class="aside-note"><strong>تلميح سريع</strong><small>تأكد إن الرد يحتوي على المعلومة الصحيحة، وراجع الكلمات المتشابهة لتجنب التكرار.</small></div>
-    </aside>
-  </div>
-</section>
-<section data-s="ar" class="settings-section role-section" hidden>
-  <div class="dashboard-topbar"><div><span class="eyebrow">إعدادات البوت</span><p>الخصائص <span> / </span> الرتبة التلقائية</p></div><span class="dashboard-account"><i></i> إدارة الرتب</span></div>
-  <div class="section-page-heading"><div><span class="eyebrow">AUTO ROLE</span><h2>الرتبة التلقائية</h2><p class="sub">حدد الرتبة التي تُضاف تلقائيًا لكل عضو جديد ينضم إلى سيرفرك.</p></div><span class="heading-icon">◇</span></div>
-  <div class="feature-workspace role-layout">
-    <div class="feature-main-panel role-main-panel">
-      <div class="panel-heading"><div><h3>إعداد رتبة الأعضاء الجدد</h3><p>اختار رتبة موجودة بالفعل في السيرفر.</p></div><span class="panel-pill">AUTOMATIC ROLE</span></div>
-      <div class="role-select-card"><span class="role-select-icon">◇</span><div class="role-select-content"><label for="ro">الرتبة التي سيتم منحها</label><select id="ro" aria-describedby="role-hint"></select><small id="role-hint">سيتم استخدام الرتبة التي تختارها عند انضمام عضو جديد.</small></div></div>
-      <div class="permission-callout"><span>!</span><div><strong>مهم قبل التفعيل</strong><p>رتبة البوت لازم تكون أعلى من الرتبة التي تختارها في ترتيب رتب Discord، وإلا لن يستطيع إضافتها للأعضاء.</p></div></div>
-      <div class="panel-actions role-actions"><span class="role-save-caption">تأكد من اختيار الرتبة الصحيحة قبل الحفظ.</span><div class="save-actions"><button class="btn p sv">حفظ التغييرات</button><span class="st"></span></div></div>
-    </div>
-    <aside class="settings-aside role-aside">
-      <div class="aside-art roles-art"><span>◇</span><strong>MEMBER ROLES</strong><small>تنظيم تلقائي للأعضاء</small></div>
-      <div class="aside-tip"><span class="tip-icon">✧</span><h3>كيف تعمل الرتبة التلقائية؟</h3><p>عند دخول عضو جديد، يحاول البوت منحه الرتبة التي حددتها في هذه الصفحة.</p><ul><li>اختار رتبة مناسبة للأعضاء الجدد.</li><li>راجع ترتيب رتبة البوت في Discord.</li><li>تقدر تغيّر الاختيار وتحفظه في أي وقت.</li></ul></div>
-      <div class="aside-note"><strong>ملاحظة</strong><small>اختيار الرتبة يتم من الرتب المتاحة التي يرجعها السيرفر من Discord.</small></div>
-    </aside>
-  </div>
-</section>
+<section data-s="rp" hidden><h2>الرد التلقائي</h2><p class="sub">لما حد يكتب الكلمة، البوت يرد بالنص.</p>
+<div id="rl"></div><button class="btn" id="ad">إضافة رد</button><br><br>
+<button class="btn p sv">حفظ</button> <span class="st"></span></section>
+<section data-s="ar" hidden><h2>الرتبة التلقائية</h2><p class="sub">رتبة البوت لازم تكون أعلى منها.</p>
+<label for="ro">الرتبة</label><select id="ro"></select><br>
+<button class="btn p sv">حفظ</button> <span class="st"></span></section>
 </div>
 </main>
+<div class="savebar" id="sbar"><span>عندك تغييرات غير محفوظة</span><button class="btn" id="rv">تجاهل</button><button class="btn p" id="sv2">حفظ التغييرات</button></div>
 </div>
+<div class="cx-bar" id="bar"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
 
 <script>
 const API='https://creatix-studio-bot.opaidamazed.workers.dev',CID='1567973220165095605';
@@ -197,23 +151,23 @@ const opt=(a,f)=>'<option value="">—</option>'+a.map(x=>'<option value="'+x.id
 all('.inv').forEach(a=>{a.href=INV;a.target='_blank'});$('lg').href=API+'/login';
 if(location.hash.startsWith('#sid=')){localStorage.sid=location.hash.slice(5);location.hash='#/dashboard'}
 const api=async(u,o={})=>{const r=await fetch(API+u,{...o,headers:{authorization:'Bearer '+(localStorage.sid||''),'content-type':'application/json'}});
-if(r.status==401){delete localStorage.sid;throw 401}return r.json()};
+if(r.status==401){delete localStorage.sid;throw 401}if(!r.ok)throw r.status;return r.json()};
 const gate=(on,t)=>{$('gate').hidden=!on;$('panel').hidden=on;if(t)$('gt').textContent=t};
 let on=0;
 function route(){const d=location.hash=='#/dashboard';$('land').hidden=d;$('dash').hidden=!d;if(d&&!on){on=1;start()}if(!d)on=0}
 async function start(){if(!localStorage.sid)return gate(1);
 try{const gs=await api('/api/guilds');
 if(!gs.length)return gate(1,'مفيش سيرفر تديره والبوت موجود فيه. أضف البوت الأول.');
-gate(0);$('g').innerHTML=gs.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');load()}catch(e){gate(1)}}
-async function load(){const id=$('g').value;
+gate(0);$('g').innerHTML=gs.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');load()}catch(e){gate(1,e===401?'انتهت الجلسة، سجّل دخولك مرة تانية.':'مشكلة مؤقتة في الاتصال. حدّث الصفحة بعد لحظات.')}}
+async function load(){const id=$('g').value;$('bar').classList.add('on');$('panel').classList.add('loading');try{
 const [m,c]=await Promise.all([api('/api/guilds/'+id+'/meta'),api('/api/guilds/'+id+'/config')]);
 $('wch').innerHTML=opt(m.channels,x=>'#'+esc(x.name));$('ro').innerHTML=opt(m.roles,x=>esc(x.name));
 const w=c.welcome;$('won').checked=w.on;$('wch').value=w.channel;$('wt').value=w.title;$('wx').value=w.text;$('wc').value=w.color;$('wi').value=w.image;$('wf').value=w.footer;$('ro').value=c.autorole;
-$('rl').innerHTML='';c.replies.forEach(r=>add(r.k,r.v));pv()}
+$('rl').innerHTML='';c.replies.forEach(r=>add(r.k,r.v));pv()}finally{$('bar').classList.remove('on');$('panel').classList.remove('loading');mark(0)}}
 function add(k,v){const d=document.createElement('div');d.className='row';
 d.innerHTML='<input class="k" placeholder="الكلمة"><input class="v" placeholder="الرد"><button class="btn" type="button">حذف</button>';
 d.querySelector('.k').value=typeof k=='string'?k:'';d.querySelector('.v').value=typeof v=='string'?v:'';
-d.querySelector('button').onclick=()=>d.remove();$('rl').appendChild(d)}
+d.querySelector('button').onclick=()=>{mark(1);d.classList.add('out');setTimeout(()=>d.remove(),180)};$('rl').appendChild(d)}
 function pv(){const f=s=>esc(s).split('{member}').join('@العضو').split('{server}').join('السيرفر').split('{count}').join('21');
 const p=$('pv');p.style.borderColor=$('wc').value;
 p.innerHTML='<b>'+f($('wt').value)+'</b><div>'+f($('wx').value)+'</div>'+($('wi').value.startsWith('https://')?'<img src="'+esc($('wi').value)+'" alt="">':'')+'<small>'+f($('wf').value)+'</small>'}
@@ -222,8 +176,19 @@ function show(v){all('[data-s]').forEach(s=>s.hidden=s.dataset.s!=v);all('.nv[da
 all('[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));show('ov');
 $('ad').onclick=()=>add();$('g').onchange=load;
 $('out').onclick=()=>{delete localStorage.sid;on=0;location.hash='#/'};
-all('.sv').forEach(b=>b.onclick=async()=>{const body={welcome:{on:$('won').checked,channel:$('wch').value,title:$('wt').value,text:$('wx').value,color:$('wc').value,image:$('wi').value,footer:$('wf').value},autorole:$('ro').value,
+let dirty=0;
+function mark(v){dirty=v;$('sbar').classList.toggle('show',!!v)}
+function toast(t,k){const e=document.createElement('div');e.className='toast '+k;e.textContent=t;$('toasts').appendChild(e);
+setTimeout(()=>{e.classList.add('out');setTimeout(()=>e.remove(),250)},2600)}
+async function save(b){b.classList.add('busy');b.disabled=true;
+const body={welcome:{on:$('won').checked,channel:$('wch').value,title:$('wt').value,text:$('wx').value,color:$('wc').value,image:$('wi').value,footer:$('wf').value},autorole:$('ro').value,
 replies:[...all('#rl .row')].map(r=>({k:r.querySelector('.k').value.trim(),v:r.querySelector('.v').value.trim()})).filter(r=>r.k&&r.v)};
-const st=b.nextElementSibling;try{await api('/api/guilds/'+$('g').value+'/config',{method:'PUT',body:JSON.stringify(body)});st.textContent='اتحفظ'}catch(e){st.textContent='فشل الحفظ'}});
+try{await api('/api/guilds/'+$('g').value+'/config',{method:'PUT',body:JSON.stringify(body)});mark(0);toast('تم حفظ التغييرات','ok')}
+catch(e){toast(e===401?'انتهت الجلسة، سجّل دخولك من جديد':'فشل الحفظ، حاول مرة أخرى','err')}
+b.classList.remove('busy');b.disabled=false}
+all('.sv').forEach(b=>b.onclick=()=>save(b));
+$('sv2').onclick=()=>save($('sv2'));$('rv').onclick=()=>load();
+$('panel').addEventListener('input',()=>mark(1));$('ad').addEventListener('click',()=>mark(1));
+addEventListener('beforeunload',e=>{if(dirty)e.preventDefault()});
 addEventListener('hashchange',route);route();
 </script>

@@ -1,0 +1,31 @@
+/* Landing hero v2: neon-purple glass. Load last. */
+@keyframes cx-fl{50%{translate:0 -14px}}
+@keyframes cx-tw{50%{opacity:.45;scale:.82}}
+#land .top .logo svg{width:22px;height:22px;margin-inline-end:6px;color:var(--hi)}
+#land .hero{padding-top:clamp(56px,9vh,96px)}
+#land .hero::before{opacity:.18}
+.waves{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:22px}
+.orn i{width:min(16vw,170px);height:1px;background:linear-gradient(90deg,transparent,rgba(224,170,255,.7),transparent)}
+.spk{position:absolute;width:var(--s,26px);height:var(--s,26px);background:#c084fc;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);filter:drop-shadow(0 0 10px #a855f7);animation:cx-tw 3.6s ease-in-out infinite}
+.orn .spk{position:static}
+#land .hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff;max-width:900px}
+#land .hero h1 .gl{background:linear-gradient(100deg,#e0aaff,#a855f7 55%,#c084fc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+#land .hero .btn svg{width:16px;height:16px;margin-inline-end:8px;vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.dia{position:absolute;width:var(--w,64px);aspect-ratio:1;rotate:45deg;border-radius:20%;background:linear-gradient(135deg,rgba(157,78,221,.5),rgba(60,9,108,.2));border:1px solid rgba(224,170,255,.28);backdrop-filter:blur(6px);animation:cx-fl 7s ease-in-out infinite}
+.plate{position:absolute;left:6%;top:30%;width:clamp(150px,17vw,240px);aspect-ratio:1.15;perspective:700px}
+.plate-in{width:100%;height:100%;display:grid;place-items:center;border-radius:28px;background:linear-gradient(145deg,#8b3fe0,#3c096c);box-shadow:0 30px 60px rgba(60,9,108,.55),inset 0 1px 0 rgba(255,255,255,.3);transform:rotateY(-18deg) rotateX(8deg) rotateZ(-6deg);animation:cx-fl 6s ease-in-out infinite}
+.plate svg{width:56%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+.plate::after{content:"";position:absolute;left:-12%;right:-12%;bottom:-6%;height:32%;border:3px solid rgba(224,170,255,.6);border-radius:50%;rotate:-10deg;box-shadow:0 0 24px rgba(168,85,247,.55)}
+#land .emb{position:relative;max-width:520px;margin:48px auto 0;padding:20px 22px;padding-inline-start:108px;border:1px solid rgba(224,170,255,.28);border-radius:26px;background:linear-gradient(160deg,rgba(60,9,108,.45),rgba(25,0,54,.72));box-shadow:0 0 60px rgba(157,78,221,.28);backdrop-filter:blur(14px);text-align:start}
+#land .emb::before{display:none}
+.orb{position:absolute;inset-inline-start:-18px;top:50%;translate:0 -50%;width:92px;height:92px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b476f0,#5a189a);box-shadow:0 0 34px rgba(168,85,247,.6)}
+.orb::after{content:"";position:absolute;inset:-9px -16px;border:2px solid rgba(224,170,255,.4);border-radius:50%;rotate:-14deg}
+.orb svg{width:50%}
+#land .g3>.card{border-radius:22px;background:linear-gradient(160deg,rgba(60,9,108,.3),rgba(25,0,54,.6));backdrop-filter:blur(10px)}
+.card-h{display:flex;align-items:center;gap:12px;margin-bottom:8px}.card-h h3{margin:0}
+.ico{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:14px;color:#c084fc;background:rgba(124,58,237,.25);border:1px solid rgba(224,170,255,.2)}
+.ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:900px){.plate,.dia.d3{display:none}}
+@media(max-width:620px){#land .emb{padding-inline-start:84px}.orb{width:70px;height:70px}.dia{--w:44px!important}}
+@media(prefers-reduced-motion:reduce){.spk,.dia,.plate-in{animation:none}}

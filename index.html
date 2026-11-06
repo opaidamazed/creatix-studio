@@ -2,6 +2,13 @@
 <html lang="ar" dir="rtl">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+/* restore the clean URL that 404.html encoded as /repo/?/dashboard */
+(function(l){if(l.search[1]==='/'){var d=l.search.slice(1).split('&').map(function(s){return s.replace(/~and~/g,'&')}).join('?');
+history.replaceState(null,null,l.pathname.slice(0,-1)+d+l.hash)}})(window.location);
+/* base URL so relative assets and links work on /dashboard and /dashboard/ */
+(function(l){if(l.protocol==='about:')return;document.write('<base href="'+(l.hostname.endsWith('github.io')?'/'+l.pathname.split('/')[1]+'/':'/')+'">')})(window.location);
+</script>
 <title>Creatix Bot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,11 +56,11 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 <link rel="stylesheet" href="creatix-dashboard-motion.css">
 
 <div id="land">
-<div class="top"><a class="logo" href="#/">Creatix <b>Bot</b></a><a class="btn" href="#/dashboard">لوحة التحكم</a></div>
+<div class="top"><a class="logo" href="./">Creatix <b>Bot</b></a><a class="btn" href="dashboard">لوحة التحكم</a></div>
 <section class="hero">
 <h1>تحكّم في سيرفر ديسكورد من لوحة واحدة</h1>
 <p class="lead">ترحيب بصورة ونص تختارهم، ردود تلقائية، رتب للأعضاء الجدد وأوامر إشراف. كل ده بالعربي ومن غير كود.</p>
-<a class="btn p inv">أضف البوت لسيرفرك</a> <a class="btn" href="#/dashboard">افتح لوحة التحكم</a>
+<a class="btn p inv">أضف البوت لسيرفرك</a> <a class="btn" href="dashboard">افتح لوحة التحكم</a>
 <div class="emb"><b>أهلاً بيك في سيرفرنا</b><div>أهلاً @سارة، أنت العضو رقم 21 🎉</div><small>اقرأ القوانين قبل ما تبدأ</small></div>
 </section>
 <div class="g3">
@@ -81,7 +88,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 </section>
 
 <section class="landing-section showcase-section">
-  <div class="showcase-copy"><span class="eyebrow">لوحة تحكم موحّدة</span><h2>إعدادات واضحة بدون تعقيد</h2><p>انتقل بين الخصائص من القائمة الجانبية، عدّل الإعدادات، وشاهد معاينة رسالة الترحيب قبل اعتمادها.</p><a class="btn p" href="#/dashboard">جرّب لوحة التحكم</a></div>
+  <div class="showcase-copy"><span class="eyebrow">لوحة تحكم موحّدة</span><h2>إعدادات واضحة بدون تعقيد</h2><p>انتقل بين الخصائص من القائمة الجانبية، عدّل الإعدادات، وشاهد معاينة رسالة الترحيب قبل اعتمادها.</p><a class="btn p" href="dashboard">جرّب لوحة التحكم</a></div>
   <div class="showcase-panel"><div class="showcase-top"><span></span><span></span><span></span><b>Creatix Dashboard</b></div><div class="showcase-body"><div class="showcase-nav"><i></i><i></i><i></i></div><div class="showcase-content"><strong>أهلاً بك في مجتمعك ✨</strong><div class="showcase-line wide"></div><div class="showcase-line"></div><div class="showcase-actions"><i></i><i></i></div><div class="showcase-stat-grid"><i></i><i></i><i></i></div></div></div></div>
 </section>
 
@@ -100,7 +107,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 
 <div id="dash" class="dash" hidden>
 <aside class="sb">
-<a class="logo" href="#/">Creatix <b>Bot</b></a>
+<a class="logo" href="./">Creatix <b>Bot</b></a>
 <label for="g">السيرفر</label><select id="g"></select>
 <h4>عام</h4><button class="nv" data-v="ov">نظرة عامة</button>
 <h4>الخصائص</h4>
@@ -149,12 +156,16 @@ const $=i=>document.getElementById(i),all=s=>document.querySelectorAll(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const opt=(a,f)=>'<option value="">—</option>'+a.map(x=>'<option value="'+x.id+'">'+f(x)+'</option>').join('');
 all('.inv').forEach(a=>{a.href=INV;a.target='_blank'});$('lg').href=API+'/login';
-if(location.hash.startsWith('#sid=')){localStorage.sid=location.hash.slice(5);location.hash='#/dashboard'}
+let fake=null;const rs=u=>{try{history.replaceState(null,'',new URL(u,document.baseURI))}catch(e){}};
+if(location.hash.startsWith('#sid=')){localStorage.sid=location.hash.slice(5);rs('dashboard')}
+else if(location.hash=='#/dashboard')rs('dashboard');
 const api=async(u,o={})=>{const r=await fetch(API+u,{...o,headers:{authorization:'Bearer '+(localStorage.sid||''),'content-type':'application/json'}});
 if(r.status==401){delete localStorage.sid;throw 401}if(!r.ok)throw r.status;return r.json()};
 const gate=(on,t)=>{$('gate').hidden=!on;$('panel').hidden=on;if(t)$('gt').textContent=t};
 let on=0;
-function route(){const d=location.hash=='#/dashboard';$('land').hidden=d;$('dash').hidden=!d;if(d&&!on){on=1;start()}if(!d)on=0}
+const isDash=()=>fake!==null?fake:location.pathname.replace(/\/$/,'').endsWith('/dashboard');
+function go(u){const d=/dashboard\/?$/.test(u);try{history.pushState(null,'',new URL(u,document.baseURI))}catch(e){fake=d}route();scrollTo(0,0)}
+function route(){const d=isDash();if(!d&&fake===null){try{if(location.pathname!==new URL(document.baseURI).pathname)history.replaceState(null,'',document.baseURI)}catch(e){}}$('land').hidden=d;$('dash').hidden=!d;if(d&&!on){on=1;start()}if(!d)on=0}
 async function start(){if(!localStorage.sid)return gate(1);
 try{const gs=await api('/api/guilds');
 if(!gs.length)return gate(1,'مفيش سيرفر تديره والبوت موجود فيه. أضف البوت الأول.');
@@ -175,7 +186,7 @@ p.innerHTML='<b>'+f($('wt').value)+'</b><div>'+f($('wx').value)+'</div>'+($('wi'
 function show(v){all('[data-s]').forEach(s=>s.hidden=s.dataset.s!=v);all('.nv[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==v))}
 all('[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));show('ov');
 $('ad').onclick=()=>add();$('g').onchange=load;
-$('out').onclick=()=>{delete localStorage.sid;on=0;location.hash='#/'};
+$('out').onclick=()=>{delete localStorage.sid;on=0;go('./')};
 let dirty=0;
 function mark(v){dirty=v;$('sbar').classList.toggle('show',!!v)}
 function toast(t,k){const e=document.createElement('div');e.className='toast '+k;e.textContent=t;$('toasts').appendChild(e);
@@ -190,5 +201,8 @@ all('.sv').forEach(b=>b.onclick=()=>save(b));
 $('sv2').onclick=()=>save($('sv2'));$('rv').onclick=()=>load();
 $('panel').addEventListener('input',()=>mark(1));$('ad').addEventListener('click',()=>mark(1));
 addEventListener('beforeunload',e=>{if(dirty)e.preventDefault()});
-addEventListener('hashchange',route);route();
+addEventListener('popstate',route);
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href]');if(!a||a.target||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+const r=a.getAttribute('href');if(r!=='dashboard'&&r!=='./')return;e.preventDefault();go(r)});
+route();
 </script>

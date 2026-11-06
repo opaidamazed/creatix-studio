@@ -171,7 +171,7 @@ let fake=null;const rs=u=>{try{history.replaceState(null,'',new URL(u,document.b
 if(location.hash.startsWith('#sid=')){localStorage.sid=location.hash.slice(5);rs('dashboard')}
 else if(location.hash=='#/dashboard')rs('dashboard');
 const api=async(u,o={})=>{const r=await fetch(API+u,{...o,headers:{authorization:'Bearer '+(localStorage.sid||''),'content-type':'application/json'}});
-if(r.status==401){delete localStorage.sid;throw 401}if(!r.ok)throw r.status;return r.json()};
+if(r.status==401){delete localStorage.sid;throw 401}if(!r.ok){const j=await r.json().catch(()=>({}));throw{status:r.status,detail:j.detail||j.error}}return r.json()};
 const GM={load:['جارٍ التحميل…','لحظات ونجهّز لوحتك.'],login:['سجّل دخولك للمتابعة','استخدم حساب Discord لإدارة السيرفرات اللي البوت موجود فيها.'],none:['البوت مش في سيرفر تديره','أضف البوت لسيرفرك، وبعدها حدّث الصفحة.'],err:['تعذّر تحميل البيانات','حدّث الصفحة بعد لحظات.']};
 function gate(m,t){$('gate').hidden=!m;$('panel').hidden=!!m;$('dash').classList.toggle('noauth',!!m);if(!m)return;
 $('gh').textContent=GM[m][0];$('gt').textContent=t||GM[m][1];$('lg').hidden=$('gn').hidden=m!='login';
@@ -185,7 +185,7 @@ async function start(){if(!localStorage.sid)return gate('login');gate('load');
 try{const gs=await api('/api/guilds');
 if(!gs.length){let t;try{const d=await api('/api/diag');t=d.bot===0?'البوت لسه مش مضاف على أي سيرفر.':d.shared===0?'البوت موجود، بس مش في أي سيرفر إنت فيه.':'البوت موجود في سيرفراتك، بس مفيش عندك صلاحية Manage Server فيها.'}catch(e){}return gate('none',t)}
 gate(0);$('g').innerHTML=gs.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');load()}
-catch(e){gate(e===401?'login':'err',e===401?'انتهت الجلسة، سجّل دخولك مرة تانية.':'')}}
+catch(e){gate(e===401?'login':'err',e===401?'انتهت الجلسة، سجّل دخولك مرة تانية.':e&&e.detail?'السبب: '+e.detail:e instanceof TypeError?'تعذّر الوصول للخادم.':'')}}
 $('lo').onclick=()=>$('out').click();
 async function load(){const id=$('g').value;$('bar').classList.add('on');$('panel').classList.add('loading');try{
 const [m,c]=await Promise.all([api('/api/guilds/'+id+'/meta'),api('/api/guilds/'+id+'/config')]);

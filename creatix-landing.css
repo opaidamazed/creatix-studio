@@ -36,3 +36,15 @@
 .logo-mark{display:inline-block;flex:none;width:34px;height:34px;background:linear-gradient(120deg,#dfb8ff,#9e56dc);-webkit-mask:url(assets/CREATIX.png) center/contain no-repeat;mask:url(assets/CREATIX.png) center/contain no-repeat}
 .plate .lm{display:grid;width:86%;filter:drop-shadow(0 8px 16px rgba(20,0,50,.5))}
 .plate .lm .logo-mark{width:100%;height:auto;aspect-ratio:1;background:linear-gradient(135deg,#fff,#e0aaff 55%,#c084fc)}
+
+
+/* Legal footer link */
+.site-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:1100px;margin:0 auto;padding:26px 5vw;border-top:1px solid rgba(224,170,255,.14);color:var(--mu);font-size:13px}
+.site-footer .footer-brand{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.site-footer .footer-brand strong{color:var(--tx);font-size:14px;font-weight:600}
+.site-footer .footer-brand span{padding:0;color:var(--mu)}
+.site-footer .footer-terms{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid rgba(192,132,252,.3);border-radius:11px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(25,0,54,.55));color:var(--hi);font-weight:600;transition:background .2s,border-color .2s,transform .2s}
+.site-footer .footer-terms svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.site-footer .footer-terms:hover{border-color:var(--ac);background:rgba(124,58,237,.28);transform:translateY(-2px)}
+@media(max-width:620px){.site-footer{justify-content:center;flex-direction:column;text-align:center;padding:24px 18px}.site-footer .footer-brand{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.site-footer .footer-terms{transition:none}}

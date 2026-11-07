@@ -10,7 +10,7 @@ Welcome messages, auto-replies, auto roles and moderation, configured from a cle
 <br>
 
 [![Live site](https://img.shields.io/badge/Live_Site-Open-9d4edd?style=for-the-badge&labelColor=10002b)](https://opaidamazed.github.io/creatix-studio/)
-[![Add to Discord](https://img.shields.io/badge/Add_to_Discord-Invite-7b2cbf?style=for-the-badge&logo=discord&logoColor=white&labelColor=10002b)](https://discord.com/oauth2/authorize?client_id=1567973220165095605&permissions=1099780156422&scope=bot%20applications.commands)
+[![Add to Discord](https://img.shields.io/badge/Add_to_Discord-Invite-7b2cbf?style=for-the-badge&logo=discord&logoColor=white&labelColor=10002b)](https://discord.com/oauth2/authorize?client_id=1567973220165095605&permissions=1099780156438&scope=bot%20applications.commands)
 [![Stars](https://img.shields.io/github/stars/opaidamazed/creatix-studio?style=for-the-badge&color=e0aaff&labelColor=10002b)](https://github.com/opaidamazed/creatix-studio/stargazers)
 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white&labelColor=10002b)
@@ -127,25 +127,44 @@ Built with **discord.py 2.x** and slash commands. Requires the *Server Members* 
 
 | Area | Commands / behaviour |
 |---|---|
-| **Moderation** | `/ban`, `/kick`, `/mute` (timeout, in minutes), `/unmute`, `/clear` (bulk delete). Each is hidden from members who lack the matching permission. |
+| **Moderation** | `/ban`, `/kick`, `/mute`, `/unmute`, `/clear`, `/warn`, `/warnings`, `/clearwarnings`. Actions check the moderator permission and Discord role hierarchy. |
+| **Channel controls** | `/lock` and `/unlock` control sending messages for @everyone; `/slowmode` sets a channel rate limit from 0 to 21,600 seconds. |
+| **Server logs** | `/setlogs` and `/disablelogs` choose or disable a log channel. Creatix records member joins, bans, unbans, and moderation actions. |
 | **Welcome** | Greets new members in a chosen channel with `{member}`, `{server}` and `{count}` variables. Set up with `/setwelcome`. |
-| **Auto role** | Assigns a role on join. Set up with `/setautorole`. |
+| **Auto role** | Assigns a role on join. Set up with `/setautorole`; the bot checks that the selected role is below its own top role. |
 | **Auto-replies** | Replies when a message contains a keyword. Manage with `/addreply`, `/delreply`, `/replies`. |
-| **Utility** | `/ping` shows gateway latency. |
+| **Server utilities** | `/ping`, `/serverinfo`, and `/userinfo`. |
 
-Moderation commands fail gracefully with a clear message when the bot's role sits below the target in the role hierarchy.
+### Command permissions
+
+Slash-command visibility is configured with Discord default permissions, and the bot also checks permissions at runtime. The bot checks its own permissions and role hierarchy before carrying out moderation or channel actions.
+
+- **Ban / kick:** users need Ban Members / Kick Members; the bot needs the matching permission.
+- **Timeout / warnings:** users need Moderate Members; the bot needs Moderate Members for timeouts.
+- **Clear messages:** users and bot need Manage Messages.
+- **Lock / unlock:** users need Manage Channels and Manage Roles; the bot needs Manage Roles to edit the channel permission overwrite.
+- **Slowmode:** users and bot need Manage Channels.
+- **Log setup:** users need Manage Server. In the selected log channel, the bot needs View Channel, Send Messages and Embed Links.
+- **Welcome / replies / auto role:** the matching server-management permission is required; the bot needs Send Messages in the selected welcome channel and Manage Roles for auto role.
+
+**Important:** the updated invite asks for the additional **Manage Channels** permission required by `/slowmode`. Existing servers must grant that permission to Creatix (re-invite with the updated link or adjust the bot role in Server Settings → Roles).
+
+Warnings and the selected log-channel ID are saved per server in the bot's ignored `data.json` file. They are not currently edited from the web dashboard.
+
+Moderation commands cannot target the server owner or members whose highest role is equal to or above the moderator's or bot's role, where a hierarchy check applies.
 
 ### Status and roadmap
 
-The dashboard already stores the full configuration (including welcome title, colour, image and footer) and exposes it to the bot through `/bot/config/:id`. The bot side of that connection is the next milestone.
+The web dashboard stores welcome, auto-role and auto-reply settings in Cloudflare KV and exposes them through `/bot/config/:id`. The bot still has a separate local configuration file for its slash-command settings; syncing both sides into one source of truth remains a follow-up task.
 
 - [x] Landing page and dashboard with Discord login
 - [x] Per-server configuration API with permission checks
 - [x] Moderation, welcome, auto-role and keyword replies
+- [x] Warnings, channel controls and configurable moderation logs
 - [ ] Bot reads settings from the dashboard API (single source of truth)
-- [ ] Embed-style messages for `/ping` and the welcome message
-- [ ] Welcome image card with the member's avatar and name
-- [ ] Leave messages, logs, and a level system
+- [ ] Embed-style welcome messages and welcome image cards
+- [ ] Leave messages and a level system
+- [ ] Community events and games (future phase)
 
 ## Run your own
 

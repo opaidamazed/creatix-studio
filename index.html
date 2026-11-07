@@ -53,10 +53,19 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 @media(max-width:760px){.dash{grid-template-columns:1fr}.sb{position:static;height:auto}}
 </style>
 <link rel="icon" href="assets/favicon.ico" sizes="any">
-<link rel="stylesheet" href="creatix-enhancements.css">
-<link rel="stylesheet" href="creatix-dashboard-motion.css">
-<link rel="stylesheet" href="creatix-landing.css">
+<link rel="stylesheet" href="creatix-enhancements.css?v=4">
+<link rel="stylesheet" href="creatix-dashboard-motion.css?v=4">
+<link rel="stylesheet" href="creatix-landing.css?v=4">
 
+<style id="cx-logo">
+.logo{display:inline-flex;align-items:center;gap:8px}
+.logo-mark{display:inline-block;flex:none;width:34px;height:34px;background:url(assets/CREATIX.png) center/contain no-repeat}
+@supports ((-webkit-mask-image:url(a)) or (mask-image:url(a))){
+.logo-mark{background:linear-gradient(120deg,#dfb8ff,#9e56dc);-webkit-mask:url(assets/CREATIX.png) center/contain no-repeat;mask:url(assets/CREATIX.png) center/contain no-repeat}
+.plate .lm .logo-mark{background:linear-gradient(135deg,#fff,#e0aaff 55%,#c084fc)}}
+.plate .lm{display:grid;width:86%;filter:drop-shadow(0 8px 16px rgba(20,0,50,.5))}
+.plate .lm .logo-mark{width:100%;height:auto;aspect-ratio:1}
+</style>
 <div id="land">
 <div class="top"><a class="logo" href="./"><span class="logo-mark" role="img" aria-label="Creatix"></span>Creatix <b>Bot</b></a><a class="btn" href="dashboard">لوحة التحكم</a></div>
 <section class="hero">

@@ -139,7 +139,7 @@ Built with **discord.py 2.x** and slash commands. Requires the *Server Members* 
 
 Slash-command visibility is configured with Discord default permissions, and the bot also checks permissions at runtime. The bot checks its own permissions and role hierarchy before carrying out moderation or channel actions.
 
-- **Ban / kick:** users need Ban Members / Kick Members; the bot needs the matching permission.
+- **Ban / unban / kick:** users need Ban Members / Kick Members; the bot needs the matching permission. `/unban` takes the banned user's Discord ID.
 - **Timeout / warnings:** users need Moderate Members; the bot needs Moderate Members for timeouts.
 - **Clear messages:** users and bot need Manage Messages.
 - **Lock / unlock:** users need Manage Channels and Manage Roles; the bot needs Manage Roles to edit the channel permission overwrite.

@@ -56,6 +56,34 @@ def save_data():
 data = load_data()
 
 
+def render_welcome_message(
+    template: str,
+    *,
+    user_mention: str,
+    user_name: str,
+    member_count: str,
+    server_name: str,
+) -> str:
+    """Replace current and legacy welcome placeholders without formatting user text."""
+    values = {
+        "[user]": user_mention,
+        "[userName]": user_name,
+        "[memberCount]": member_count,
+        "[server]": server_name,
+        # Backward compatibility with messages saved before the new placeholders.
+        "{member}": user_mention,
+        "{user}": user_mention,
+        "{userName}": user_name,
+        "{memberCount}": member_count,
+        "{server}": server_name,
+        "{count}": member_count,
+    }
+    rendered = str(template or "")
+    for token, value in sorted(values.items(), key=lambda item: len(item[0]), reverse=True):
+        rendered = rendered.replace(token, str(value))
+    return rendered
+
+
 def cfg(guild_id: int):
     """Return a server config and add defaults for older data.json files."""
     current = data.setdefault(str(guild_id), {})
@@ -218,23 +246,13 @@ async def on_member_join(member: discord.Member):
     if channel_id:
         channel = member.guild.get_channel(int(channel_id))
         if isinstance(channel, discord.TextChannel):
-            message = server_cfg.get("welcome_msg") or "أهلاً [user] في [server]! 🎉"
-            member_count = str(member.guild.member_count or "?")
-            replacements = {
-                "[user]": member.mention,
-                "[userName]": member.display_name,
-                "[memberCount]": member_count,
-                "[server]": member.guild.name,
-                # Backward-compatible placeholders used by older saved messages.
-                "{member}": member.mention,
-                "{user}": member.mention,
-                "{userName}": member.display_name,
-                "{memberCount}": member_count,
-                "{server}": member.guild.name,
-                "{count}": member_count,
-            }
-            for token, value in sorted(replacements.items(), key=lambda item: len(item[0]), reverse=True):
-                message = message.replace(token, str(value))
+            message = render_welcome_message(
+                server_cfg.get("welcome_msg") or "أهلاً [user] في [server]! 🎉",
+                user_mention=member.mention,
+                user_name=member.display_name,
+                member_count=str(member.guild.member_count or "?"),
+                server_name=member.guild.name,
+            )
 
             try:
                 await channel.send(

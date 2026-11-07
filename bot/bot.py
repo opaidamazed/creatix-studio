@@ -206,16 +206,6 @@ async def on_member_join(member: discord.Member):
     )
 
 
-@bot.event
-async def on_member_ban(guild: discord.Guild, user: discord.User):
-    await send_log(guild, "تم حظر عضو", f"**العضو:** {user.mention}\n**المعرف:** {user.id}", RED)
-
-
-@bot.event
-async def on_member_unban(guild: discord.Guild, user: discord.User):
-    await send_log(guild, "تم فك حظر عضو", f"**العضو:** {user.mention}\n**المعرف:** {user.id}", GREEN)
-
-
 # ---------- Automatic replies ----------
 @bot.event
 async def on_message(message: discord.Message):
@@ -337,6 +327,43 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
         await send_moderation_result(interaction, NO_PERM)
     except discord.HTTPException:
         await send_moderation_result(interaction, "تعذّر تنفيذ الطرد من Discord. حاول مرة أخرى.")
+
+
+@bot.tree.command(name="unban", description="فك حظر مستخدم باستخدام Discord ID")
+@app_commands.default_permissions(ban_members=True)
+@app_commands.checks.has_permissions(ban_members=True)
+@app_commands.checks.bot_has_permissions(ban_members=True)
+@app_commands.guild_only()
+@app_commands.describe(user_id="Discord ID للمستخدم المحظور", reason="سبب فك الحظر")
+async def unban(
+    interaction: discord.Interaction,
+    user_id: str,
+    reason: str = "بدون سبب",
+):
+    raw_id = user_id.strip()
+    if not raw_id.isdigit() or not 17 <= len(raw_id) <= 20:
+        return await interaction.response.send_message(
+            "اكتب Discord ID صحيح للمستخدم.",
+            ephemeral=True,
+        )
+
+    await interaction.response.defer(ephemeral=True)
+    try:
+        user = await bot.fetch_user(int(raw_id))
+        await interaction.guild.unban(user, reason=reason[:500])
+        await interaction.followup.send(f"✅ تم فك الحظر عن {user}.", ephemeral=True)
+        await send_log(
+            interaction.guild,
+            "فك حظر مستخدم",
+            f"**المستخدم:** {user}\n**بواسطة:** {interaction.user.mention}\n**السبب:** {reason[:500]}",
+            GREEN,
+        )
+    except discord.NotFound:
+        await interaction.followup.send("المستخدم ده مش موجود أو مش موجود في قائمة المحظورين.", ephemeral=True)
+    except discord.Forbidden:
+        await interaction.followup.send(NO_PERM, ephemeral=True)
+    except discord.HTTPException:
+        await interaction.followup.send("تعذّر فك الحظر من Discord. حاول مرة أخرى.", ephemeral=True)
 
 
 @bot.tree.command(name="mute", description="إسكات عضو لمدة محددة بالدقائق")

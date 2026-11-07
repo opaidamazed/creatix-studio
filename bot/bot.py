@@ -11,6 +11,25 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 DATA_FILE = "data.json"
 
+# Discord presence is applied when the bot process connects.
+# A running process is still required for the bot to appear online.
+PRESENCE_STATUS = os.getenv("BOT_STATUS", "online").strip().lower()
+ACTIVITY_TYPE = os.getenv("BOT_ACTIVITY_TYPE", "watching").strip().lower()
+ACTIVITY_TEXT = os.getenv("BOT_ACTIVITY_TEXT", "your community").strip()
+
+PRESENCE_STATUSES = {
+    "online": discord.Status.online,
+    "idle": discord.Status.idle,
+    "dnd": discord.Status.dnd,
+    "invisible": discord.Status.invisible,
+}
+PRESENCE_ACTIVITIES = {
+    "playing": discord.ActivityType.playing,
+    "listening": discord.ActivityType.listening,
+    "watching": discord.ActivityType.watching,
+    "competing": discord.ActivityType.competing,
+}
+
 
 # ---------- Local per-server storage ----------
 def load_data():
@@ -37,12 +56,40 @@ def save_data():
 data = load_data()
 
 
+def render_welcome_message(
+    template: str,
+    *,
+    user_mention: str,
+    user_name: str,
+    member_count: str,
+    server_name: str,
+) -> str:
+    """Replace current and legacy welcome placeholders without formatting user text."""
+    values = {
+        "[user]": user_mention,
+        "[userName]": user_name,
+        "[memberCount]": member_count,
+        "[server]": server_name,
+        # Backward compatibility with messages saved before the new placeholders.
+        "{member}": user_mention,
+        "{user}": user_mention,
+        "{userName}": user_name,
+        "{memberCount}": member_count,
+        "{server}": server_name,
+        "{count}": member_count,
+    }
+    rendered = str(template or "")
+    for token, value in sorted(values.items(), key=lambda item: len(item[0]), reverse=True):
+        rendered = rendered.replace(token, str(value))
+    return rendered
+
+
 def cfg(guild_id: int):
     """Return a server config and add defaults for older data.json files."""
     current = data.setdefault(str(guild_id), {})
     defaults = {
         "welcome_channel": None,
-        "welcome_msg": "أهلاً {member} في {server}! 🎉",
+        "welcome_msg": "أهلاً [user] في [server]! 🎉",
         "auto_role": None,
         "replies": {},
         "warnings": {},
@@ -65,9 +112,28 @@ intents.members = True
 intents.message_content = True
 
 
+def configured_presence():
+    status = PRESENCE_STATUSES.get(PRESENCE_STATUS)
+    if status is None:
+        print(f"Warning: BOT_STATUS={PRESENCE_STATUS!r} is invalid; using online.")
+        status = discord.Status.online
+
+    activity = None
+    activity_type = PRESENCE_ACTIVITIES.get(ACTIVITY_TYPE)
+    if ACTIVITY_TEXT and activity_type is not None:
+        activity = discord.Activity(type=activity_type, name=ACTIVITY_TEXT)
+    elif ACTIVITY_TEXT and ACTIVITY_TYPE not in {"none", "off"}:
+        print(f"Warning: BOT_ACTIVITY_TYPE={ACTIVITY_TYPE!r} is invalid; no activity will be shown.")
+
+    return status, activity
+
+
 class Bot(discord.Client):
     def __init__(self):
-        super().__init__(intents=intents)
+        status, activity = configured_presence()
+        # Set the initial presence as the client connects. This avoids
+        # repeatedly sending presence updates from on_ready reconnect events.
+        super().__init__(intents=intents, status=status, activity=activity)
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
@@ -158,7 +224,10 @@ async def send_moderation_result(interaction: discord.Interaction, message: str)
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user} ({bot.user.id})")
+    print(
+        f"Logged in as {bot.user} ({bot.user.id}) "
+        f"with status={bot.status.name} and activity={ACTIVITY_TYPE!r}"
+    )
 
 
 # ---------- Member events ----------
@@ -180,21 +249,23 @@ async def on_member_join(member: discord.Member):
     if channel_id:
         channel = member.guild.get_channel(int(channel_id))
         if isinstance(channel, discord.TextChannel):
-            message = server_cfg.get("welcome_msg") or "أهلاً {member} في {server}! 🎉"
+            message = render_welcome_message(
+                server_cfg.get("welcome_msg") or "أهلاً [user] في [server]! 🎉",
+                user_mention=member.mention,
+                user_name=member.display_name,
+                member_count=str(member.guild.member_count or "?"),
+                server_name=member.guild.name,
+            )
+
             try:
-                message = message.format(
-                    member=member.mention,
-                    server=member.guild.name,
-                    count=member.guild.member_count or "?",
+                await channel.send(
+                    message,
+                    allowed_mentions=discord.AllowedMentions(
+                        users=[member],
+                        roles=False,
+                        everyone=False,
+                    ),
                 )
-            except (KeyError, ValueError, IndexError):
-                message = (
-                    message.replace("{member}", member.mention)
-                    .replace("{server}", member.guild.name)
-                    .replace("{count}", str(member.guild.member_count or "?"))
-                )
-            try:
-                await channel.send(message)
             except (discord.Forbidden, discord.HTTPException):
                 pass
 
@@ -717,10 +788,14 @@ async def disablelogs(interaction: discord.Interaction):
 @app_commands.default_permissions(manage_guild=True)
 @app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
+@app_commands.describe(
+    channel="قناة إرسال رسالة الترحيب",
+    message="المتغيرات: [user] منشن، [userName] الاسم، [memberCount] عدد الأعضاء، [server] اسم السيرفر.",
+)
 async def setwelcome(
     interaction: discord.Interaction,
     channel: discord.TextChannel,
-    message: str = "أهلاً {member} في {server}! 🎉",
+    message: str = "أهلاً [user] في [server]! 🎉",
 ):
     bot_member = interaction.guild.me
     if bot_member is None or not channel.permissions_for(bot_member).send_messages:

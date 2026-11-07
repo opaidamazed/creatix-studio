@@ -130,7 +130,7 @@ Built with **discord.py 2.x** and slash commands. Requires the *Server Members* 
 | **Moderation** | `/ban`, `/unban`, `/kick`, `/mute`, `/unmute`, `/clear`, `/warn`, `/warnings`, `/clearwarnings`. Actions check the moderator permission and Discord role hierarchy. |
 | **Channel controls** | `/lock` and `/unlock` control sending messages for @everyone; `/slowmode` sets a channel rate limit from 0 to 21,600 seconds. |
 | **Server logs** | `/setlogs` and `/disablelogs` choose or disable a log channel. Creatix records member joins, bans, unbans, and moderation actions. |
-| **Welcome** | Greets new members in a chosen channel with `{member}`, `{server}` and `{count}` variables. Set up with `/setwelcome`. |
+| **Welcome** | Greets new members with `[user]` (mention), `[userName]` (display name), `[memberCount]` (server member count), and `[server]` (server name). Legacy `{member}`, `{server}` and `{count}` placeholders remain supported. Configure with `/setwelcome`. |
 | **Auto role** | Assigns a role on join. Set up with `/setautorole`; the bot checks that the selected role is below its own top role. |
 | **Auto-replies** | Replies when a message contains a keyword. Manage with `/addreply`, `/delreply`, `/replies`. |
 | **Server utilities** | `/ping`, `/serverinfo`, and `/userinfo`. |
@@ -153,6 +153,29 @@ Warnings and the selected log-channel ID are saved per server in the bot's ignor
 
 Moderation commands cannot target the server owner or members whose highest role is equal to or above the moderator's or bot's role, where a hierarchy check applies.
 
+### Welcome placeholders and bot presence
+
+The `/setwelcome` message accepts these placeholders:
+
+| Placeholder | Replaced with |
+|---|---|
+| `[user]` | Member mention |
+| `[userName]` | Member display name without a mention |
+| `[memberCount]` | Current server member count |
+| `[server]` | Server name |
+
+Older saved messages using `{member}`, `{server}`, and `{count}` continue to work.
+
+Set the bot's Discord presence in the bot host's environment variables (or `bot/.env`):
+
+| Variable | Values | Default |
+|---|---|---|
+| `BOT_STATUS` | `online`, `idle`, `dnd`, `invisible` | `online` |
+| `BOT_ACTIVITY_TYPE` | `playing`, `watching`, `listening`, `competing`, `none` | `watching` |
+| `BOT_ACTIVITY_TEXT` | Any short activity text | `your community` |
+
+The bot applies its configured status when it connects and reconnects. **Presence settings do not run the bot process:** the bot must be running continuously on an always-on host to remain online. If the process stops or the host sleeps, Discord will show the bot as offline regardless of these values. After changing environment variables, restart the bot process.
+
 ### Status and roadmap
 
 The web dashboard stores welcome, auto-role and auto-reply settings in Cloudflare KV and exposes them through `/bot/config/:id`. The bot still has a separate local configuration file for its slash-command settings; syncing both sides into one source of truth remains a follow-up task.
@@ -174,7 +197,7 @@ You need a Discord application ([Developer Portal](https://discord.com/developer
 
 ```bash
 cd bot
-cp .env.example .env          # add DISCORD_BOT_TOKEN
+cp env.example .env           # add DISCORD_BOT_TOKEN and optional presence settings
 pip install -r requirements.txt
 python bot.py
 ```
@@ -222,9 +245,11 @@ If Creatix saved you time, consider giving it a star.
 
 **Creatix Bot** بوت ديسكورد عربي بلوحة تحكم على الويب. تسجّل دخول بحساب Discord، تختار السيرفر، وتضبط رسالة الترحيب والردود التلقائية والرتبة التلقائية مع معاينة مباشرة، من غير أي كود.
 
+- **متغيرات الترحيب:** `[user]` لمنشن العضو، `[userName]` لاسمه بدون منشن، `[memberCount]` لعدد الأعضاء، و`[server]` لاسم السيرفر. الصيغ القديمة تظل مدعومة.
+- **حالة البوت:** تقدر تضبط `BOT_STATUS=online` وحالة النشاط من متغيرات البيئة. لازم عملية البوت تفضل شغالة على استضافة مستمرة عشان يفضل ظاهر Online.
 - **لوحة تحكم متعددة السيرفرات:** كل سيرفر له إعداداته المستقلة، ولا تظهر لك إلا السيرفرات اللي عندك فيها صلاحية Manage Server.
 - **واجهة عربية بالكامل:** تخطيط RTL وخط IBM Plex Sans Arabic.
-- **أوامر إشراف:** حظر وطرد وميوت ومسح رسائل.
+- **أوامر إشراف:** حظر وطرد وميوت ومسح رسائل وتحذيرات وسجلات وتحكم في القنوات.
 - **تكلفة صفر:** GitHub Pages مع Cloudflare Workers واستضافة بوت مجانية.
 
 لو المشروع عجبك، نجمة ⭐ بتفرق معانا كتير.

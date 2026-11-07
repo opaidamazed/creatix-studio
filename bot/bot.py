@@ -112,9 +112,28 @@ intents.members = True
 intents.message_content = True
 
 
+def configured_presence():
+    status = PRESENCE_STATUSES.get(PRESENCE_STATUS)
+    if status is None:
+        print(f"Warning: BOT_STATUS={PRESENCE_STATUS!r} is invalid; using online.")
+        status = discord.Status.online
+
+    activity = None
+    activity_type = PRESENCE_ACTIVITIES.get(ACTIVITY_TYPE)
+    if ACTIVITY_TEXT and activity_type is not None:
+        activity = discord.Activity(type=activity_type, name=ACTIVITY_TEXT)
+    elif ACTIVITY_TEXT and ACTIVITY_TYPE not in {"none", "off"}:
+        print(f"Warning: BOT_ACTIVITY_TYPE={ACTIVITY_TYPE!r} is invalid; no activity will be shown.")
+
+    return status, activity
+
+
 class Bot(discord.Client):
     def __init__(self):
-        super().__init__(intents=intents)
+        status, activity = configured_presence()
+        # Set the initial presence as the client connects. This avoids
+        # repeatedly sending presence updates from on_ready reconnect events.
+        super().__init__(intents=intents, status=status, activity=activity)
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
@@ -205,26 +224,10 @@ async def send_moderation_result(interaction: discord.Interaction, message: str)
 
 @bot.event
 async def on_ready():
-    status = PRESENCE_STATUSES.get(PRESENCE_STATUS)
-    if status is None:
-        print(f"Warning: BOT_STATUS={PRESENCE_STATUS!r} is invalid; using online.")
-        status = discord.Status.online
-
-    activity = None
-    activity_type = PRESENCE_ACTIVITIES.get(ACTIVITY_TYPE)
-    if ACTIVITY_TEXT and activity_type is not None:
-        activity = discord.Activity(type=activity_type, name=ACTIVITY_TEXT)
-    elif ACTIVITY_TEXT and ACTIVITY_TYPE not in {"none", "off"}:
-        print(f"Warning: BOT_ACTIVITY_TYPE={ACTIVITY_TYPE!r} is invalid; no activity will be shown.")
-
-    try:
-        await bot.change_presence(status=status, activity=activity)
-        print(
-            f"Logged in as {bot.user} ({bot.user.id}) "
-            f"with status={status.name} and activity={ACTIVITY_TYPE!r}"
-        )
-    except discord.HTTPException as error:
-        print(f"Could not update Discord presence: {error}")
+    print(
+        f"Logged in as {bot.user} ({bot.user.id}) "
+        f"with status={bot.status.name} and activity={ACTIVITY_TYPE!r}"
+    )
 
 
 # ---------- Member events ----------

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سياسة الخصوصية | Creatix Bot</title>
+<meta name="description" content="تعرف على البيانات التي يعالجها Creatix Bot وموقع Creatix Studio، وأسباب استخدامها وطرق التحكم فيها ومدة الاحتفاظ بها.">
+<meta name="theme-color" content="#10002b">
+<link rel="canonical" href="https://opaidamazed.github.io/creatix-studio/privacy">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Creatix Studio">
+<meta property="og:title" content="سياسة الخصوصية | Creatix Bot">
+<meta property="og:description" content="كيف يتعامل Creatix Bot مع بيانات تسجيل الدخول والسيرفرات والإعدادات وسجلات الإشراف.">
+<meta property="og:url" content="https://opaidamazed.github.io/creatix-studio/privacy">
+<meta property="og:image" content="https://opaidamazed.github.io/creatix-studio/assets/creatix-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#10002b;--panel:#190036;--panel2:#210744;--line:rgba(192,132,252,.2);--accent:#a855f7;--accent2:#e0aaff;--text:#f3e9ff;--muted:#b79ad6;--soft:#d9c5ef}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% 0%,rgba(109,40,217,.28),transparent 32%),radial-gradient(ellipse at 90% 20%,rgba(126,34,206,.18),transparent 28%),var(--bg);color:var(--text);font:15px/1.9 'IBM Plex Sans Arabic',Tahoma,system-ui,sans-serif}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(168,85,247,.045) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,rgba(168,85,247,.045) 1px,transparent 1px) 0 0/48px 48px;mask-image:linear-gradient(#000,transparent 85%)}
+a{color:inherit;text-decoration:none}
+a:focus-visible{outline:2px solid var(--accent2);outline-offset:4px;border-radius:8px}
+.site-nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(5vw,22px);border-bottom:1px solid rgba(224,170,255,.12);background:rgba(16,0,43,.75);backdrop-filter:blur(16px)}
+.logo{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.logo-mark{width:34px;height:34px;display:inline-block;background:linear-gradient(130deg,#f0d7ff,#9d4edd);mask:url(../assets/CREATIX.png) center/contain no-repeat;-webkit-mask:url(../assets/CREATIX.png) center/contain no-repeat}
+.logo b{color:var(--accent2)}
+.nav-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nav-link{padding:8px 15px;border:1px solid var(--line);border-radius:10px;color:var(--soft);transition:.2s ease}
+.nav-link:hover{border-color:var(--accent);background:rgba(168,85,247,.1);color:#fff}
+.wrap{width:min(960px,calc(100% - 36px));margin:0 auto;padding:64px 0 90px}
+.hero{text-align:center;margin-bottom:34px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.08em}
+.eyebrow:before{content:"";width:22px;height:1px;background:var(--accent)}
+h1{font-size:clamp(34px,6vw,54px);line-height:1.35;margin:10px 0 12px;font-weight:700}
+.hero p{max-width:720px;margin:0 auto;color:var(--muted);font-size:16px}
+.meta{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.meta span{border:1px solid var(--line);background:rgba(33,7,68,.65);border-radius:999px;padding:5px 13px;color:var(--soft);font-size:12px}
+.notice{display:flex;gap:12px;align-items:flex-start;margin:28px 0;padding:16px 18px;border:1px solid rgba(168,85,247,.35);border-right:3px solid var(--accent);border-radius:14px;background:linear-gradient(110deg,rgba(88,28,135,.2),rgba(25,0,54,.78))}
+.notice svg{width:22px;height:22px;flex:none;color:var(--accent2);margin-top:3px}
+.notice p{margin:0;color:var(--soft)}
+.toc{display:flex;flex-wrap:wrap;gap:9px;margin:24px 0 30px}
+.toc a{font-size:12px;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:rgba(25,0,54,.65);transition:.2s}
+.toc a:hover{background:rgba(168,85,247,.16);border-color:var(--accent)}
+.policy-card{border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(36,9,68,.9),rgba(20,0,38,.92));box-shadow:0 24px 70px rgba(0,0,0,.18);overflow:hidden}
+.policy-section{padding:25px 30px;border-bottom:1px solid rgba(192,132,252,.13);scroll-margin-top:100px}
+.policy-section:last-child{border-bottom:0}
+.section-head{display:flex;align-items:center;gap:13px;margin-bottom:9px}
+.num{width:34px;height:34px;display:grid;place-items:center;flex:none;border:1px solid rgba(192,132,252,.32);border-radius:11px;background:rgba(126,34,206,.18);color:var(--accent2);font-size:13px;font-weight:700}
+h2{margin:0;font-size:19px;font-weight:600}
+.policy-section p{margin:7px 0;color:var(--muted)}
+.policy-section ul{margin:8px 0 0;padding-right:22px;color:var(--muted)}
+.policy-section li{padding:3px 0}
+.policy-section strong{color:var(--soft);font-weight:600}
+.policy-section a.inline{color:var(--accent2);text-decoration:underline;text-underline-offset:3px}
+.inline-code{direction:ltr;unicode-bidi:embed;font-family:ui-monospace,monospace;font-size:.92em;color:var(--soft);background:rgba(0,0,0,.2);padding:1px 5px;border-radius:5px}
+.footer{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin-top:30px;padding:20px 4px;border-top:1px solid rgba(224,170,255,.12);color:var(--muted);font-size:13px}
+.footer-links{display:flex;gap:16px;flex-wrap:wrap}
+.footer a{color:var(--accent2)}
+@media(max-width:620px){.site-nav{height:auto;min-height:66px;padding:12px 18px}.nav-link{padding:7px 10px;font-size:12px}.wrap{width:min(100% - 26px,960px);padding:46px 0 58px}.hero p{font-size:14px}.policy-section{padding:21px 17px}.section-head{align-items:flex-start}h2{font-size:17px}.notice{padding:13px}.footer{justify-content:center;text-align:center}.footer-links{justify-content:center}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <a class="logo" href="../" aria-label="Creatix Bot - الصفحة الرئيسية"><span class="logo-mark" aria-hidden="true"></span><span>Creatix <b>Bot</b></span></a>
+  <nav class="nav-actions" aria-label="التنقل الرئيسي">
+    <a class="nav-link" href="../">الصفحة الرئيسية</a>
+    <a class="nav-link" href="../terms">الشروط والأحكام</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero" aria-labelledby="page-title">
+    <span class="eyebrow">CREATIX STUDIO · PRIVACY</span>
+    <h1 id="page-title">سياسة الخصوصية</h1>
+    <p>توضح هذه الصفحة البيانات التي يتعامل معها Creatix Bot وموقع Creatix Studio ولوحة التحكم، ولماذا نحتاج إليها، وأين تُعالج، وما الخيارات المتاحة لك للتحكم فيها.</p>
+    <div class="meta"><span>آخر تحديث: 7 نوفمبر 2026</span><span>الخدمة: Creatix Bot</span></div>
+  </section>
+
+  <div class="notice" role="note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+    <p>هذه السياسة تصف سلوك النسخة الحالية من المشروع بحسب طريقة عمل الموقع والـWorker والبوت. بعض البيانات تُعالج بواسطة Discord أو مزودي الاستضافة وفق سياساتهم هم أيضًا. يُرجى قراءة هذه الصفحة مع <a class="inline" href="../terms">الشروط والأحكام</a>.</p>
+  </div>
+
+  <nav class="toc" aria-label="محتويات سياسة الخصوصية">
+    <a href="#controller">المسؤول عن الخدمة</a><a href="#data">البيانات التي نتعامل معها</a><a href="#purpose">أسباب الاستخدام</a><a href="#messages">الرسائل والسجلات</a><a href="#storage">التخزين والاحتفاظ</a><a href="#sharing">المشاركة والخدمات الخارجية</a><a href="#security">الحماية</a><a href="#choices">خياراتك وحقوقك</a><a href="#children">الأعمار</a><a href="#changes">تحديث السياسة</a><a href="#contact">التواصل</a>
+  </nav>
+
+  <div class="policy-card">
+    <section class="policy-section" id="controller">
+      <div class="section-head"><span class="num">01</span><h2>من المسؤول عن البيانات؟</h2></div>
+      <p>تُدار خدمة Creatix Bot وموقع Creatix Studio بواسطة صاحب المشروع ومشغّله (<span class="inline-code">opaidamazed</span>). عند استخدام Discord أو خدمات الاستضافة، تعمل تلك الشركات بصفتها مزودي خدمات مستقلين وتخضع معالجة البيانات لديها لسياساتها الخاصة.</p>
+      <p>لا توجد حاليًا بوابة مستقلة لطلبات الخصوصية أو عنوان بريد مخصص لها. توجد وسيلة التواصل المتاحة في قسم التواصل أدناه.</p>
+    </section>
+
+    <section class="policy-section" id="data">
+      <div class="section-head"><span class="num">02</span><h2>ما البيانات التي نتعامل معها؟</h2></div>
+      <ul>
+        <li><strong>بيانات تسجيل الدخول عبر Discord:</strong> يطلب الموقع نطاقي OAuth <span class="inline-code">identify</span> و<span class="inline-code">guilds</span>. يستخدم الـWorker رمز الوصول الناتج للاستعلام عن قائمة السيرفرات التي يستطيع حسابك الوصول إليها، مع بيانات مثل معرّف السيرفر واسمه والملكية وصلاحيات الحساب. لا يستدعي الكود الحالي نقطة <span class="inline-code">/users/@me</span> لجلب ملف شخصي مستقل.</li>
+        <li><strong>بيانات الجلسة:</strong> يُنشأ معرّف جلسة عشوائي، ويُحفظ رمز وصول Discord المرتبط به في Cloudflare Workers KV لتشغيل لوحة التحكم والتحقق من الصلاحيات.</li>
+        <li><strong>إعدادات السيرفر:</strong> تشمل معرّف قناة الترحيب، نص الترحيب وعنوانه ولونه ورابط صورته وتذييله، معرّف الرتبة التلقائية، وكلمات الردود التلقائية ونصوص ردودها.</li>
+        <li><strong>بيانات تشغيل البوت:</strong> قد تشمل معرّفات السيرفرات والقنوات والرتب والأعضاء، ورسائل الترحيب والردود التي يضبطها مدير السيرفر، وسجلات التحذيرات التي تحتوي على معرّف العضو ومعرّف المشرف وسبب التحذير وتوقيته.</li>
+        <li><strong>بيانات الأحداث والإشراف:</strong> عند تفعيل قناة السجلات، قد يرسل البوت تفاصيل مرتبطة بانضمام الأعضاء أو إجراءات الإشراف، مثل العضو أو المشرف أو القناة أو سبب الإجراء، بحسب نوع الحدث.</li>
+        <li><strong>بيانات تقنية:</strong> قد تعالج منصات الاستضافة والاتصال بيانات تشغيل وطلبات تقنية مثل عنوان IP ونوع المتصفح ووقت الطلب وسجلات الأعطال وفق سياساتها وإعداداتها.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="purpose">
+      <div class="section-head"><span class="num">03</span><h2>لماذا نستخدم هذه البيانات؟</h2></div>
+      <ul>
+        <li>إتمام تسجيل الدخول والتحقق من أن المستخدم يملك السيرفر أو لديه صلاحية إدارته، وأن البوت موجود في السيرفر.</li>
+        <li>عرض القنوات والرتب المتاحة التي يحتاجها المستخدم لإعداد خصائص البوت.</li>
+        <li>حفظ الإعدادات لكل سيرفر وإرسالها إلى عملية البوت لتنفيذ الترحيب والردود والرتب التلقائية.</li>
+        <li>تنفيذ أوامر Discord التي يطلبها المشرفون، وتسجيل التحذيرات والأحداث عند استخدام ميزات الإشراف والسجلات.</li>
+        <li>حماية الخدمة، واكتشاف الأخطاء، والحفاظ على سلامة التشغيل ومنع الاستخدام غير المصرح به.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="messages">
+      <div class="section-head"><span class="num">04</span><h2>محتوى الرسائل وقنوات السجلات</h2></div>
+      <p>تحتاج ميزة الردود التلقائية إلى قراءة محتوى الرسالة الواردة أثناء معالجتها ومقارنتها بالكلمات أو العبارات التي أضافها مدير السيرفر. يقوم معالج الردود الحالي بهذه المطابقة في الذاكرة ولا يكتب نص الرسالة الواردة بالكامل إلى ملف بيانات البوت ضمن هذا المعالج. لا يشمل ذلك ما قد تحتفظ به Discord أو مزود الاستضافة ضمن خدماتهما وسجلاتهما.</p>
+      <p>قد تُخزّن نصوص الرسائل التي يكتبها مدير السيرفر بنفسه، مثل قالب الترحيب والردود وأسباب التحذيرات، لأنها جزء من الإعدادات أو سجلات الإشراف.</p>
+      <p>عند تحديد قناة باستخدام أمر إعداد السجلات، يرسل البوت إليها أحداثًا وتفاصيل مرتبطة بالأعضاء والإجراءات الإشرافية. يتحكم مدير السيرفر في القناة وصلاحيات من يمكنه مشاهدة الرسائل المنشورة فيها، وتخضع تلك الرسائل أيضًا لسياسات Discord وإعدادات الاحتفاظ لدى السيرفر.</p>
+    </section>
+
+    <section class="policy-section" id="storage">
+      <div class="section-head"><span class="num">05</span><h2>أين تُخزّن البيانات وكم نحتفظ بها؟</h2></div>
+      <ul>
+        <li><strong>متصفحك:</strong> يحتفظ الموقع بمعرّف الجلسة في <span class="inline-code">localStorage</span> حتى تسجيل الخروج أو مسح بيانات الموقع من المتصفح. تسجيل الخروج يحذف هذا المعرّف من المتصفح.</li>
+        <li><strong>Cloudflare Workers KV:</strong> يُحفظ رمز وصول جلسة Discord لمدة تصل إلى 6 أيام وفق إعداد انتهاء الصلاحية في الكود. وتُخزّن قائمة السيرفرات مؤقتًا لمدة تصل إلى 24 ساعة، وقائمة السيرفرات التي يوجد بها البوت لمدة تصل إلى ساعة.</li>
+        <li><strong>إعدادات لوحة التحكم:</strong> تُحفظ إعدادات كل سيرفر في KV دون مدة انتهاء تلقائية محددة في الكود الحالي؛ وتظل موجودة حتى تعديلها أو حذفها من التخزين بواسطة مشغّل الخدمة.</li>
+        <li><strong>ملف بيانات البوت:</strong> يحفظ البوت بعض الإعدادات والتحذيرات في ملف <span class="inline-code">data.json</span> ضمن بيئة تشغيله. لا يوجد في الكود الحالي جدول زمني تلقائي لحذف هذا الملف أو انتهاء صلاحية التحذيرات. يحتفظ نظام التحذيرات بآخر 100 تحذير لكل عضو، ويمكن للمشرف استخدام أمر مسح التحذيرات.</li>
+        <li><strong>سجلات مزودي الخدمة:</strong> قد يحتفظ Discord وCloudflare وGitHub وWispbyte بسجلات تقنية وفق مدد وسياسات كل مزود، وهي ليست مددًا نحددها من كود Creatix.</li>
+      </ul>
+      <p>قد تختلف إمكانية استمرار ملف <span class="inline-code">data.json</span> بعد إعادة تشغيل أو إعادة إنشاء بيئة الاستضافة وفق إعدادات مزود الاستضافة وخطته. لا تفترض أن إزالة البوت من السيرفر تحذف تلقائيًا كل الإعدادات أو النسخ الموجودة لدى مزودي الخدمة.</p>
+    </section>
+
+    <section class="policy-section" id="sharing">
+      <div class="section-head"><span class="num">06</span><h2>متى تتم مشاركة البيانات؟ والخدمات الخارجية</h2></div>
+      <p>لا نبيع البيانات الشخصية. تتم معالجة أو مشاركة البيانات بالقدر اللازم لتشغيل الخدمة في الحالات التالية:</p>
+      <ul>
+        <li><strong>Discord:</strong> لتسجيل الدخول، والتحقق من السيرفرات والصلاحيات، وتشغيل البوت والأوامر وإرسال الرسائل والأحداث المطلوبة.</li>
+        <li><strong>Cloudflare:</strong> لتشغيل الـWorker وتخزين الجلسات والإعدادات وقوائم السيرفرات المؤقتة في Workers KV.</li>
+        <li><strong>GitHub Pages:</strong> لاستضافة الموقع وصفحات الشروط والخصوصية والملفات العامة للمشروع.</li>
+        <li><strong>Wispbyte:</strong> مزود استضافة عملية البوت بحسب إعداد الاستضافة الذي حدده صاحب المشروع؛ وقد تعالج المنصة بيانات تشغيل وسجلات تقنية لازمة لاستضافة العملية.</li>
+        <li><strong>Google Fonts:</strong> لتحميل خط IBM Plex Sans Arabic المستخدم في الموقع؛ وقد يتلقى مزود الخطوط بيانات الاتصال التقنية المعتادة عند تحميل الخط.</li>
+        <li><strong>قنوات Discord التي يحددها مدير السيرفر:</strong> لنشر رسائل الترحيب أو سجلات الأحداث التي فعّلها مدير السيرفر.</li>
+      </ul>
+      <p>قد تتم المعالجة أيضًا عند وجود طلب قانوني واجب التطبيق أو ضرورة لحماية الخدمة والمستخدمين من إساءة الاستخدام أو التهديدات الأمنية. تخضع الخدمات الخارجية لشروطها وسياسات الخصوصية الخاصة بها.</p>
+    </section>
+
+    <section class="policy-section" id="security">
+      <div class="section-head"><span class="num">07</span><h2>كيف نحمي البيانات؟</h2></div>
+      <p>يستخدم مسار تسجيل الدخول رمز تحقق <span class="inline-code">state</span>، وتُرسل جلسات الـWorker عبر HTTPS، كما تُحفظ أسرار تشغيل البوت والـWorker في إعدادات البيئة أو أسرار مزود الخدمة بدل تضمينها في ملفات الواجهة العامة. ويتحقق الـWorker من صلاحية المستخدم قبل السماح بقراءة إعدادات السيرفر أو تعديلها.</p>
+      <p>نبذل جهدًا معقولًا لتقليل الوصول غير المصرح به، لكن لا توجد وسيلة نقل أو تخزين عبر الإنترنت تضمن أمانًا مطلقًا. احتفظ بجهازك وحساب Discord آمنين، ولا تشارك رموز الجلسات أو توكن البوت أو مفاتيح API.</p>
+    </section>
+
+    <section class="policy-section" id="choices">
+      <div class="section-head"><span class="num">08</span><h2>خياراتك والتحكم في بياناتك</h2></div>
+      <ul>
+        <li>يمكنك تسجيل الخروج من لوحة التحكم لحذف معرّف الجلسة المخزن في المتصفح، كما يمكنك مسح بيانات الموقع من إعدادات المتصفح. تنتهي صلاحية سجل الجلسة المخزن في KV تلقائيًا خلال المدة الموضحة أعلاه.</li>
+        <li>يمكن لمالك السيرفر أو من يملك الصلاحيات إزالة البوت من السيرفر، وإيقاف ميزاته، وتعديل إعدادات الترحيب والردود والرتب والسجلات.</li>
+        <li>يمكنك مراجعة التطبيقات المصرح لها من إعدادات حساب Discord وإلغاء وصول Creatix عند عدم رغبتك في استمرار ربط الحساب بلوحة التحكم.</li>
+        <li>يمكن مسح التحذيرات المسجلة لعضو باستخدام أمر المسح المتاح للمشرفين. لا توفر لوحة التحكم الحالية زرًا لحذف كل إعدادات السيرفر أو كل بيانات ملف البوت دفعة واحدة.</li>
+        <li>لطلب مراجعة أو حذف بيانات محفوظة لدى مشغّل Creatix، استخدم وسيلة التواصل أدناه. قد نطلب معلومات محدودة للتحقق من صلاحيتك على السيرفر قبل تنفيذ الطلب. لا تنشر رموز الوصول أو كلمات المرور أو معلومات شخصية في بلاغ عام.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="children">
+      <div class="section-head"><span class="num">09</span><h2>الأطفال ومتطلبات المنصات</h2></div>
+      <p>الخدمة تعمل من خلال Discord، ولذلك يجب أن يكون استخدامك لها متوافقًا مع الحد الأدنى للعمر وشروط الاستخدام المعمول بها لدى Discord في بلدك. لا يوجّه Creatix Bot نفسه إلى جمع بيانات الأطفال بصورة مستقلة أو إنشاء ملفات تعريف لهم.</p>
+    </section>
+
+    <section class="policy-section" id="changes">
+      <div class="section-head"><span class="num">10</span><h2>التغييرات على سياسة الخصوصية</h2></div>
+      <p>قد نحدّث هذه السياسة عند تغيير طريقة عمل الموقع أو البوت أو مزودي الخدمات. سننشر النسخة الجديدة في هذه الصفحة ونحدّث تاريخ المراجعة أعلى الصفحة. ننصح بمراجعتها من وقت لآخر، خاصة عند تفعيل ميزات جديدة.</p>
+    </section>
+
+    <section class="policy-section" id="contact">
+      <div class="section-head"><span class="num">11</span><h2>التواصل وطلبات الخصوصية</h2></div>
+      <p>يمكنك فتح <a class="inline" href="https://github.com/opaidamazed/creatix-studio/issues" target="_blank" rel="noopener noreferrer">مناقشة على مستودع Creatix Studio في GitHub</a> للأسئلة العامة أو الإبلاغ عن مشكلة. لأن البلاغات العامة قد تكون مرئية للجميع، لا تضع فيها رموز وصول Discord أو معرّفات جلسات أو بيانات شخصية أو تفاصيل خاصة بسيرفرك. لا توجد حاليًا قناة بريد إلكتروني مخصصة لطلبات الخصوصية.</p>
+      <p>عند طلب حذف بيانات، وضّح نوع البيانات والسيرفر المعني بالقدر الضروري فقط، وسنراجع ما يمكن حذفه من الأنظمة التي نديرها. قد لا نتمكن من حذف السجلات التي تحتفظ بها Discord أو مزودو الخدمات الآخرون؛ يجب تقديم الطلب إليهم وفق قنواتهم الرسمية.</p>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <span>© Creatix Bot · أدوات عربية لإدارة مجتمع Discord</span>
+    <div class="footer-links"><a href="../terms">الشروط والأحكام</a><a href="../">العودة إلى الصفحة الرئيسية</a></div>
+  </footer>
+</main>
+</body>
+</html>

@@ -30,3 +30,9 @@
 @media(max-width:620px){#land .emb{padding-inline-start:84px}.orb{width:70px;height:70px}.dia{--w:44px!important}}
 @media(prefers-reduced-motion:reduce){.spk,.dia,.plate-in{animation:none}}
 .plate img{width:86%;height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(20,0,50,.5))}
+
+/* logo as a gradient mask (same soft gradient as the "Bot" word) */
+.logo{display:inline-flex;align-items:center;gap:8px}
+.logo-mark{display:inline-block;flex:none;width:34px;height:34px;background:linear-gradient(120deg,#dfb8ff,#9e56dc);-webkit-mask:url(assets/CREATIX.png) center/contain no-repeat;mask:url(assets/CREATIX.png) center/contain no-repeat}
+.plate .lm{display:grid;width:86%;filter:drop-shadow(0 8px 16px rgba(20,0,50,.5))}
+.plate .lm .logo-mark{width:100%;height:auto;aspect-ratio:1;background:linear-gradient(135deg,#fff,#e0aaff 55%,#c084fc)}

@@ -29,3 +29,4 @@
 @media(max-width:900px){.plate,.dia.d3{display:none}}
 @media(max-width:620px){#land .emb{padding-inline-start:84px}.orb{width:70px;height:70px}.dia{--w:44px!important}}
 @media(prefers-reduced-motion:reduce){.spk,.dia,.plate-in{animation:none}}
+.plate img{width:86%;height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(20,0,50,.5))}

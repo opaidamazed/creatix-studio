@@ -127,7 +127,7 @@ Built with **discord.py 2.x** and slash commands. Requires the *Server Members* 
 
 | Area | Commands / behaviour |
 |---|---|
-| **Moderation** | `/ban`, `/kick`, `/mute`, `/unmute`, `/clear`, `/warn`, `/warnings`, `/clearwarnings`. Actions check the moderator permission and Discord role hierarchy. |
+| **Moderation** | `/ban`, `/unban`, `/kick`, `/mute`, `/unmute`, `/clear`, `/warn`, `/warnings`, `/clearwarnings`. Actions check the moderator permission and Discord role hierarchy. |
 | **Channel controls** | `/lock` and `/unlock` control sending messages for @everyone; `/slowmode` sets a channel rate limit from 0 to 21,600 seconds. |
 | **Server logs** | `/setlogs` and `/disablelogs` choose or disable a log channel. Creatix records member joins, bans, unbans, and moderation actions. |
 | **Welcome** | Greets new members in a chosen channel with `{member}`, `{server}` and `{count}` variables. Set up with `/setwelcome`. |

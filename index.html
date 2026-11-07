@@ -130,7 +130,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 <div class="g3">
 <div class="card"><div class="card-h"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></span><h3>ترحيب مخصص</h3></div><p>اختار الروم والعنوان والنص واللون والصورة، وشوف المعاينة قبل الحفظ.</p></div>
 <div class="card"><div class="card-h"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3>ردود تلقائية</h3></div><p>ضيف كلمة ورد، والبوت يرد لما حد يكتبها في أي شات.</p></div>
-<div class="card"><div class="card-h"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><h3>رتب وإشراف</h3></div><p>رتبة تلقائية للأعضاء الجدد، وأوامر الحظر والميوت ومسح الرسائل.</p></div>
+<div class="card"><div class="card-h"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><h3>رتب وإشراف</h3></div><p>رتبة تلقائية للأعضاء الجدد، وتحذيرات للأعضاء، وقفل القنوات والوضع البطيء، مع سجلات للإشراف.</p></div>
 </div>
 
 <section class="landing-section intro-section">
@@ -138,7 +138,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
   <div class="feature-grid">
     <article class="feature-card"><span class="feature-icon">✦</span><h3>ترحيب يعبّر عن مجتمعك</h3><p>جهّز رسالة ترحيب بعنوان ونص وصورة ولون يناسب هوية السيرفر، مع معاينة قبل الحفظ.</p><span class="feature-meta">رسائل مخصصة · معاينة مباشرة</span></article>
     <article class="feature-card"><span class="feature-icon">↗</span><h3>ردود تلقائية أسرع</h3><p>أضف الكلمات المفتاحية والردود المتكررة لتسهيل الإجابة عن الأسئلة الشائعة داخل الشات.</p><span class="feature-meta">كلمات مفتاحية · ردود متعددة</span></article>
-    <article class="feature-card"><span class="feature-icon">◇</span><h3>تنظيم الأعضاء والرتب</h3><p>حدّد رتبة تلقائية للأعضاء الجدد، مع أدوات إشراف تساعدك على إدارة مجتمع منظم.</p><span class="feature-meta">رتبة تلقائية · أدوات إشراف</span></article>
+    <article class="feature-card"><span class="feature-icon">◇</span><h3>تنظيم الأعضاء والرتب</h3><p>حدّد رتبة تلقائية للأعضاء الجدد، واستخدم التحذيرات وأوامر الإشراف وقفل القنوات والوضع البطيء وسجلات الأحداث.</p><span class="feature-meta">رتبة تلقائية · أدوات إشراف</span></article>
   </div>
 </section>
 
@@ -220,7 +220,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--ac)}
 
 <script>
 const API='https://creatix-studio-bot.opaidamazed.workers.dev',CID='1567973220165095605';
-const INV='https://discord.com/oauth2/authorize?client_id='+CID+'&permissions=1099780156422&scope=bot%20applications.commands';
+const INV='https://discord.com/oauth2/authorize?client_id='+CID+'&permissions=1099780156438&scope=bot%20applications.commands';
 const $=i=>document.getElementById(i),all=s=>document.querySelectorAll(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const opt=(a,f)=>'<option value="">— اختر —</option>'+a.map(x=>'<option value="'+x.id+'">'+f(x)+'</option>').join('');

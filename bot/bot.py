@@ -11,6 +11,25 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 DATA_FILE = "data.json"
 
+# Discord presence is applied when the bot process connects.
+# A running process is still required for the bot to appear online.
+PRESENCE_STATUS = os.getenv("BOT_STATUS", "online").strip().lower()
+ACTIVITY_TYPE = os.getenv("BOT_ACTIVITY_TYPE", "watching").strip().lower()
+ACTIVITY_TEXT = os.getenv("BOT_ACTIVITY_TEXT", "your community").strip()
+
+PRESENCE_STATUSES = {
+    "online": discord.Status.online,
+    "idle": discord.Status.idle,
+    "dnd": discord.Status.dnd,
+    "invisible": discord.Status.invisible,
+}
+PRESENCE_ACTIVITIES = {
+    "playing": discord.ActivityType.playing,
+    "listening": discord.ActivityType.listening,
+    "watching": discord.ActivityType.watching,
+    "competing": discord.ActivityType.competing,
+}
+
 
 # ---------- Local per-server storage ----------
 def load_data():
@@ -42,7 +61,7 @@ def cfg(guild_id: int):
     current = data.setdefault(str(guild_id), {})
     defaults = {
         "welcome_channel": None,
-        "welcome_msg": "أهلاً {member} في {server}! 🎉",
+        "welcome_msg": "أهلاً [user] في [server]! 🎉",
         "auto_role": None,
         "replies": {},
         "warnings": {},
@@ -158,7 +177,26 @@ async def send_moderation_result(interaction: discord.Interaction, message: str)
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user} ({bot.user.id})")
+    status = PRESENCE_STATUSES.get(PRESENCE_STATUS)
+    if status is None:
+        print(f"Warning: BOT_STATUS={PRESENCE_STATUS!r} is invalid; using online.")
+        status = discord.Status.online
+
+    activity = None
+    activity_type = PRESENCE_ACTIVITIES.get(ACTIVITY_TYPE)
+    if ACTIVITY_TEXT and activity_type is not None:
+        activity = discord.Activity(type=activity_type, name=ACTIVITY_TEXT)
+    elif ACTIVITY_TEXT and ACTIVITY_TYPE not in {"none", "off"}:
+        print(f"Warning: BOT_ACTIVITY_TYPE={ACTIVITY_TYPE!r} is invalid; no activity will be shown.")
+
+    try:
+        await bot.change_presence(status=status, activity=activity)
+        print(
+            f"Logged in as {bot.user} ({bot.user.id}) "
+            f"with status={status.name} and activity={ACTIVITY_TYPE!r}"
+        )
+    except discord.HTTPException as error:
+        print(f"Could not update Discord presence: {error}")
 
 
 # ---------- Member events ----------
@@ -180,21 +218,33 @@ async def on_member_join(member: discord.Member):
     if channel_id:
         channel = member.guild.get_channel(int(channel_id))
         if isinstance(channel, discord.TextChannel):
-            message = server_cfg.get("welcome_msg") or "أهلاً {member} في {server}! 🎉"
+            message = server_cfg.get("welcome_msg") or "أهلاً [user] في [server]! 🎉"
+            member_count = str(member.guild.member_count or "?")
+            replacements = {
+                "[user]": member.mention,
+                "[userName]": member.display_name,
+                "[memberCount]": member_count,
+                "[server]": member.guild.name,
+                # Backward-compatible placeholders used by older saved messages.
+                "{member}": member.mention,
+                "{user}": member.mention,
+                "{userName}": member.display_name,
+                "{memberCount}": member_count,
+                "{server}": member.guild.name,
+                "{count}": member_count,
+            }
+            for token, value in sorted(replacements.items(), key=lambda item: len(item[0]), reverse=True):
+                message = message.replace(token, str(value))
+
             try:
-                message = message.format(
-                    member=member.mention,
-                    server=member.guild.name,
-                    count=member.guild.member_count or "?",
+                await channel.send(
+                    message,
+                    allowed_mentions=discord.AllowedMentions(
+                        users=True,
+                        roles=False,
+                        everyone=False,
+                    ),
                 )
-            except (KeyError, ValueError, IndexError):
-                message = (
-                    message.replace("{member}", member.mention)
-                    .replace("{server}", member.guild.name)
-                    .replace("{count}", str(member.guild.member_count or "?"))
-                )
-            try:
-                await channel.send(message)
             except (discord.Forbidden, discord.HTTPException):
                 pass
 
@@ -717,10 +767,14 @@ async def disablelogs(interaction: discord.Interaction):
 @app_commands.default_permissions(manage_guild=True)
 @app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
+@app_commands.describe(
+    channel="قناة إرسال رسالة الترحيب",
+    message="المتغيرات: [user] منشن، [userName] الاسم، [memberCount] عدد الأعضاء، [server] اسم السيرفر.",
+)
 async def setwelcome(
     interaction: discord.Interaction,
     channel: discord.TextChannel,
-    message: str = "أهلاً {member} في {server}! 🎉",
+    message: str = "أهلاً [user] في [server]! 🎉",
 ):
     bot_member = interaction.guild.me
     if bot_member is None or not channel.permissions_for(bot_member).send_messages:

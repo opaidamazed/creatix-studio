@@ -75,6 +75,28 @@ class Bot(discord.Client):
 
 
 bot = Bot()
+
+@bot.tree.error
+async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    if isinstance(error, app_commands.MissingPermissions):
+        message = "مش معاك صلاحية استخدام الأمر ده."
+    elif isinstance(error, app_commands.BotMissingPermissions):
+        message = "البوت ناقصه صلاحية مطلوبة. راجع إعدادات أدوار البوت والقناة."
+    elif isinstance(error, app_commands.NoPrivateMessage):
+        message = "الأمر ده متاح داخل السيرفرات فقط."
+    else:
+        original = getattr(error, "original", error)
+        print(f"Slash command error: {type(original).__name__}: {original}")
+        message = "حصل خطأ أثناء تنفيذ الأمر. حاول مرة أخرى أو راجع سجل تشغيل البوت."
+
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send(message, ephemeral=True)
+        else:
+            await interaction.response.send_message(message, ephemeral=True)
+    except discord.HTTPException:
+        pass
+
 NO_PERM = "❌ البوت مش معاه الصلاحية المطلوبة. راجع صلاحياته وترتيب رتبته."
 PURPLE = discord.Color.from_rgb(148, 80, 213)
 GREEN = discord.Color.from_rgb(74, 222, 128)
@@ -269,6 +291,8 @@ async def userinfo(interaction: discord.Interaction, member: Optional[discord.Me
 # ---------- Moderation: ban, kick, timeout, clear ----------
 @bot.tree.command(name="ban", description="حظر عضو من السيرفر")
 @app_commands.default_permissions(ban_members=True)
+@app_commands.checks.has_permissions(ban_members=True)
+@app_commands.checks.bot_has_permissions(ban_members=True)
 @app_commands.guild_only()
 async def ban(interaction: discord.Interaction, member: discord.Member, reason: str = "بدون سبب"):
     error = member_action_error(interaction, member)
@@ -292,6 +316,8 @@ async def ban(interaction: discord.Interaction, member: discord.Member, reason: 
 
 @bot.tree.command(name="kick", description="طرد عضو من السيرفر")
 @app_commands.default_permissions(kick_members=True)
+@app_commands.checks.has_permissions(kick_members=True)
+@app_commands.checks.bot_has_permissions(kick_members=True)
 @app_commands.guild_only()
 async def kick(interaction: discord.Interaction, member: discord.Member, reason: str = "بدون سبب"):
     error = member_action_error(interaction, member)
@@ -315,6 +341,7 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
 
 @bot.tree.command(name="mute", description="إسكات عضو لمدة محددة بالدقائق")
 @app_commands.default_permissions(moderate_members=True)
+@app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def mute(
     interaction: discord.Interaction,
@@ -346,6 +373,7 @@ async def mute(
 
 @bot.tree.command(name="unmute", description="إلغاء الإسكات عن عضو")
 @app_commands.default_permissions(moderate_members=True)
+@app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def unmute(interaction: discord.Interaction, member: discord.Member):
     error = member_action_error(interaction, member)
@@ -369,6 +397,8 @@ async def unmute(interaction: discord.Interaction, member: discord.Member):
 
 @bot.tree.command(name="clear", description="مسح عدد من الرسائل في القناة")
 @app_commands.default_permissions(manage_messages=True)
+@app_commands.checks.has_permissions(manage_messages=True)
+@app_commands.checks.bot_has_permissions(manage_messages=True)
 @app_commands.guild_only()
 async def clear(interaction: discord.Interaction, amount: app_commands.Range[int, 1, 100]):
     if not isinstance(interaction.channel, discord.TextChannel):
@@ -393,6 +423,7 @@ async def clear(interaction: discord.Interaction, amount: app_commands.Range[int
 # ---------- Warning system ----------
 @bot.tree.command(name="warn", description="تسجيل تحذير على عضو")
 @app_commands.default_permissions(moderate_members=True)
+@app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = "بدون سبب"):
     error = member_action_error(interaction, member, check_bot=False)
@@ -432,6 +463,7 @@ async def warn(interaction: discord.Interaction, member: discord.Member, reason:
 
 @bot.tree.command(name="warnings", description="عرض التحذيرات المسجلة على عضو")
 @app_commands.default_permissions(moderate_members=True)
+@app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def warnings(interaction: discord.Interaction, member: discord.Member):
     entries = cfg(interaction.guild_id)["warnings"].get(str(member.id), [])
@@ -464,6 +496,7 @@ async def warnings(interaction: discord.Interaction, member: discord.Member):
 
 @bot.tree.command(name="clearwarnings", description="مسح كل تحذيرات عضو")
 @app_commands.default_permissions(moderate_members=True)
+@app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def clearwarnings(interaction: discord.Interaction, member: discord.Member):
     error = member_action_error(interaction, member, check_bot=False)
@@ -491,6 +524,8 @@ async def clearwarnings(interaction: discord.Interaction, member: discord.Member
 # ---------- Channel controls ----------
 @bot.tree.command(name="lock", description="منع الأعضاء من إرسال الرسائل في قناة")
 @app_commands.default_permissions(manage_channels=True, manage_roles=True)
+@app_commands.checks.has_permissions(manage_channels=True, manage_roles=True)
+@app_commands.checks.bot_has_permissions(manage_roles=True)
 @app_commands.guild_only()
 @app_commands.describe(channel="القناة المطلوب قفلها، واتركها فارغة للقناة الحالية")
 async def lock(interaction: discord.Interaction, channel: Optional[discord.TextChannel] = None):
@@ -528,6 +563,8 @@ async def lock(interaction: discord.Interaction, channel: Optional[discord.TextC
 
 @bot.tree.command(name="unlock", description="السماح للأعضاء بإرسال الرسائل في قناة")
 @app_commands.default_permissions(manage_channels=True, manage_roles=True)
+@app_commands.checks.has_permissions(manage_channels=True, manage_roles=True)
+@app_commands.checks.bot_has_permissions(manage_roles=True)
 @app_commands.guild_only()
 @app_commands.describe(channel="القناة المطلوب فتحها، واتركها فارغة للقناة الحالية")
 async def unlock(interaction: discord.Interaction, channel: Optional[discord.TextChannel] = None):
@@ -565,6 +602,8 @@ async def unlock(interaction: discord.Interaction, channel: Optional[discord.Tex
 
 @bot.tree.command(name="slowmode", description="تحديد وقت الانتظار بين الرسائل في قناة")
 @app_commands.default_permissions(manage_channels=True)
+@app_commands.checks.has_permissions(manage_channels=True)
+@app_commands.checks.bot_has_permissions(manage_channels=True)
 @app_commands.guild_only()
 @app_commands.describe(
     seconds="عدد الثواني بين الرسائل (0 لإلغاء الوضع البطيء، والحد الأقصى 21600)",
@@ -605,6 +644,7 @@ async def slowmode(
 # ---------- Server logs configuration ----------
 @bot.tree.command(name="setlogs", description="تحديد قناة سجلات Creatix")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 @app_commands.describe(channel="القناة التي ستستقبل سجلات الأعضاء والإشراف")
 async def setlogs(interaction: discord.Interaction, channel: discord.TextChannel):
@@ -635,6 +675,7 @@ async def setlogs(interaction: discord.Interaction, channel: discord.TextChannel
 
 @bot.tree.command(name="disablelogs", description="إيقاف سجلات Creatix في هذا السيرفر")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 async def disablelogs(interaction: discord.Interaction):
     cfg(interaction.guild_id)["logs_channel"] = None
@@ -645,6 +686,7 @@ async def disablelogs(interaction: discord.Interaction):
 # ---------- Welcome and automatic role setup ----------
 @bot.tree.command(name="setwelcome", description="تحديد قناة الترحيب ورسالة اختيارية")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 async def setwelcome(
     interaction: discord.Interaction,
@@ -659,6 +701,8 @@ async def setwelcome(
 
 @bot.tree.command(name="setautorole", description="تحديد الرتبة التلقائية للأعضاء الجدد")
 @app_commands.default_permissions(manage_roles=True)
+@app_commands.checks.has_permissions(manage_roles=True)
+@app_commands.checks.bot_has_permissions(manage_roles=True)
 @app_commands.guild_only()
 async def setautorole(interaction: discord.Interaction, role: discord.Role):
     bot_member = interaction.guild.me
@@ -676,6 +720,7 @@ async def setautorole(interaction: discord.Interaction, role: discord.Role):
 # ---------- Automatic replies management ----------
 @bot.tree.command(name="addreply", description="إضافة رد تلقائي لكلمة")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 async def addreply(interaction: discord.Interaction, trigger: str, response: str):
     trigger = trigger.strip().casefold()
@@ -697,6 +742,7 @@ async def addreply(interaction: discord.Interaction, trigger: str, response: str
 
 @bot.tree.command(name="delreply", description="حذف رد تلقائي")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 async def delreply(interaction: discord.Interaction, trigger: str):
     trigger = trigger.strip().casefold()
@@ -709,6 +755,7 @@ async def delreply(interaction: discord.Interaction, trigger: str):
 
 @bot.tree.command(name="replies", description="عرض الردود التلقائية")
 @app_commands.default_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.guild_only()
 async def replies(interaction: discord.Interaction):
     items = cfg(interaction.guild_id)["replies"]

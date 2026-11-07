@@ -1,0 +1,32 @@
+name: Validate Discord bot
+
+on:
+  pull_request:
+    paths:
+      - "bot/**/*.py"
+      - ".github/workflows/bot-compile.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "bot/**/*.py"
+      - ".github/workflows/bot-compile.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  python-syntax:
+    name: Python syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile bot source
+        run: python -m py_compile bot/bot.py

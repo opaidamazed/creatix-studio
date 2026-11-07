@@ -261,7 +261,7 @@ async def on_member_join(member: discord.Member):
                 await channel.send(
                     message,
                     allowed_mentions=discord.AllowedMentions(
-                        users=True,
+                        users=[member],
                         roles=False,
                         everyone=False,
                     ),

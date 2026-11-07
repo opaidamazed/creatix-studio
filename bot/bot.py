@@ -342,6 +342,7 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
 @bot.tree.command(name="mute", description="إسكات عضو لمدة محددة بالدقائق")
 @app_commands.default_permissions(moderate_members=True)
 @app_commands.checks.has_permissions(moderate_members=True)
+@app_commands.checks.bot_has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def mute(
     interaction: discord.Interaction,
@@ -374,6 +375,7 @@ async def mute(
 @bot.tree.command(name="unmute", description="إلغاء الإسكات عن عضو")
 @app_commands.default_permissions(moderate_members=True)
 @app_commands.checks.has_permissions(moderate_members=True)
+@app_commands.checks.bot_has_permissions(moderate_members=True)
 @app_commands.guild_only()
 async def unmute(interaction: discord.Interaction, member: discord.Member):
     error = member_action_error(interaction, member)
@@ -693,6 +695,12 @@ async def setwelcome(
     channel: discord.TextChannel,
     message: str = "أهلاً {member} في {server}! 🎉",
 ):
+    bot_member = interaction.guild.me
+    if bot_member is None or not channel.permissions_for(bot_member).send_messages:
+        return await interaction.response.send_message(
+            "البوت محتاج صلاحية Send Messages في قناة الترحيب المختارة.",
+            ephemeral=True,
+        )
     cfg(interaction.guild_id)["welcome_channel"] = channel.id
     cfg(interaction.guild_id)["welcome_msg"] = message[:1000]
     save_data()

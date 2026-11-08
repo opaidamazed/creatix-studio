@@ -79,7 +79,7 @@ creatix-studio/
 
 ## The website
 
-**Single-page, hash-routed.** `#/` shows the landing page and `#/dashboard` shows the control panel. Both live in one `index.html`, so it deploys to GitHub Pages as-is with no router and no bundler.
+**Single-page, routed.** `/` shows the landing page and `/dashboard` shows the control panel. Both live in one `index.html`, so it deploys to GitHub Pages as-is with no router and no bundler.
 
 **Landing page:** hero with an animated grid, feature cards, a three-step onboarding flow, a dashboard showcase, an FAQ built on native `<details>` elements (no JavaScript), and a closing call to action.
 
